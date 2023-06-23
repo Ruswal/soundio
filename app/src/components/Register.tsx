@@ -12,9 +12,10 @@ function Register(props: any) {
 
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <form className="registration-form" onSubmit={handleSubmit}>
         <label htmlFor="name"> Full Name </label>
         <input
+          className="input"
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="name"
@@ -25,6 +26,7 @@ function Register(props: any) {
         />
         <label htmlFor="email"> email </label>
         <input
+          className="input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -35,6 +37,7 @@ function Register(props: any) {
         />
         <label htmlFor="password"> Password </label>
         <input
+          className="input"
           value={pass}
           onChange={(e) => setPass(e.target.value)}
           type="password"
@@ -44,7 +47,11 @@ function Register(props: any) {
           autoComplete="off"
         />
       </form>
-      <button type="submit" onClick={() => props.onFormSwitch("login")}>
+      <button
+        className="button"
+        type="submit"
+        onClick={() => props.onFormSwitch("login")}
+      >
         Register
       </button>
     </div>

@@ -11,9 +11,10 @@ function Login(props: any) {
 
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email"> email </label>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <label htmlFor="email"> Email </label>
         <input
+          className="input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -24,6 +25,7 @@ function Login(props: any) {
         />
         <label htmlFor="password"> Password </label>
         <input
+          className="input"
           value={pass}
           onChange={(e) => setPass(e.target.value)}
           type="password"
@@ -32,10 +34,12 @@ function Login(props: any) {
           name="password"
           autoComplete="off"
         />
-        <button type="submit">Log In</button>
+        <button className="button" type="submit">
+          Log In
+        </button>
       </form>
-      <button onClick={() => props.onFormSwitch("register")}>
-        Regitser here
+      <button className="button" onClick={() => props.onFormSwitch("register")}>
+        Register here
       </button>
     </div>
   );

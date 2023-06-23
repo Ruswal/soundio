@@ -1,6 +1,7 @@
 import Login from "./components/Login";
 import Register from "./components/Register";
 import React, { useState } from "react";
+import "./App.css";
 
 function App(): JSX.Element {
   const [currentForm, setCurrentForm] = useState<string>("login");
@@ -9,13 +10,16 @@ function App(): JSX.Element {
     setCurrentForm(formName);
   };
   return (
-    <div>
-      {currentForm === "login" ? (
-        <Login onFormSwitch={toggleForm} />
-      ) : (
-        <Register onFormSwitch={toggleForm} />
-      )}
-    </div>
+    <>
+      <div className="background"></div>
+      <div className="App">
+        {currentForm === "login" ? (
+          <Login onFormSwitch={toggleForm} />
+        ) : (
+          <Register onFormSwitch={toggleForm} />
+        )}
+      </div>
+    </>
   );
 }
 

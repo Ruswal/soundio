@@ -1,23 +1,25 @@
+use soundio;
+
 CREATE TABLE users (
     ID int NOT NULL AUTO_INCREMENT,
     email varchar(150),
     pswd varchar(50),
     username varchar(255),
-    pfp_url text,
+    pfp text,
     created_dt date,
     PRIMARY KEY (ID)
 );
 
 CREATE TABLE songs (
     ID int NOT NULL auto_increment,
-    song_name text,
+    name text,
     song_art text,
-    song_url text,
+    url text,
     genre text,
     artist int,
     release_dt date,
     upload_dt date,
-    PRIMARY KEY User(ID)
+    PRIMARY KEY(ID)
 );
 
 CREATE TABLE user_playlist (
@@ -29,7 +31,7 @@ CREATE TABLE user_playlist (
     created_by int,
     created_on date,
     PRIMARY KEY (ID),
-    FOREIGN KEY(user) REFERENCES User(ID) ON DELETE CASCADE
+    FOREIGN KEY(user) REFERENCES users(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE playlist_items (
@@ -45,14 +47,14 @@ CREATE TABLE liked_songs (
     ID int NOT NULL auto_increment,
     user int,
     PRIMARY KEY (ID),
-    FOREIGN KEY(user) REFERENCES user(ID) ON DELETE CASCADE
+    FOREIGN KEY(user) REFERENCES users(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE liked_items (
     ID int NOT NULL auto_increment,
     liked_song int,
     song int,
-    date_added date,
+    added_dt date,
     PRIMARY KEY (ID),
     FOREIGN KEY(liked_song) REFERENCES liked_songs(ID) ON DELETE CASCADE,
     FOREIGN KEY(song) REFERENCES songs(ID) ON DELETE CASCADE

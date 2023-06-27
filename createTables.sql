@@ -65,7 +65,7 @@ CREATE TABLE artists (
     ID int NOT NULL auto_increment,
     email text,
     pswd text,
-    pfp_url txt,
+    pfp_url text,
     name text,
     genre text,
     created_at date,

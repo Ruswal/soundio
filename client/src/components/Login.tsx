@@ -3,9 +3,26 @@ import React, { useState } from "react";
 function Login(props: any) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, pass}),
+    })
+
+    .then((response) => response.json())
+    .then((data) => {
+      setMessage(data.message)
+    })
+    .catch((err) => {
+      console.error('err: ' + err)
+    });
+
     console.log(email);
   };
 

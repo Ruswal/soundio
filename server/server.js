@@ -4,10 +4,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 
 // database connection setup
 const db = mysql.createConnection({
@@ -26,10 +29,13 @@ db.connect((err)=>{
 
 // Login endpoint
 app.post('/login', (req, res) => {
-  const {email, password} = req.body;
-  const query = 'select * from users where email="${email}" and pswd="${password}"';
   
-  db.query(query, (err, result) => {
+  const email = req.body.email;
+  const password = req.body.pass;
+
+  const query = 'select * from users where email = ? and pswd = ?';
+  
+  db.query(query, [email, password], (err, result) => {
     if (err) throw err;
 
     if(result.length === 1){

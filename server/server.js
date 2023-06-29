@@ -1,7 +1,13 @@
 require("dotenv").config();
 const express = require ('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const mysql = require('mysql');
 const app = express();
+const port = 5000;
+
+app.use(bodyParser.json());
+app.use(cors());
 
 // database connection setup
 const db = mysql.createConnection({
@@ -19,7 +25,6 @@ db.connect((err)=>{
 })
 
 // Login endpoint
-
 app.post('/login', (req, res) => {
   const {email, password} = req.body;
   const query = 'select * from users where email="${email}" and pswd="${password}"';
@@ -36,6 +41,6 @@ app.post('/login', (req, res) => {
   })
 })
 
-db.listen(port, () => {
-  console.log("server is listening to ${port}");
+app.listen(port, () => {
+  console.log(`server is listening to ${port}`);
 })

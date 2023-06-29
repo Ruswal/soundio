@@ -63,15 +63,15 @@ function Login(props) {
 
 			<input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
 
+			<div className = "button-container">
+				<button className="button" type="submit">
+						Login
+				</button>
+				<button className="button" onClick={() => props.onFormSwitch("register")}>
+					Sign-up
+				</button>
+			</div>
 		</form>
-		<div className = "button-container">
-			<button className="button">
-					Login
-			</button>
-			<button className="button" onClick={() => props.onFormSwitch("register")}>
-				Sign-up
-			</button>
-		</div>
 	</div>);
 }
 

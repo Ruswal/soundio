@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
+import './form.css';
 
 const LOGIN_URL = '/login';
 
@@ -57,20 +58,20 @@ function Login(props) {
 	return (<div className="form-container">
 		<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
 		<form method="post" className="login-form" onSubmit={handleSubmit}>
-			
-			<label htmlFor="email"> Email </label>
-			<input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
+			<p className="formHeader">Soundio</p>
+			<input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
 
-			<label htmlFor="password"> Password </label>
-			<input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="*********" id="password" name="password" autoComplete="off" required/>
+			<input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
 
-			<button className="button">
-				Log In
-			</button>
 		</form>
-		<button className="button" onClick={() => props.onFormSwitch("register")}>
-			Register here
-		</button>
+		<div className = "button-container">
+			<button className="button">
+					Login
+			</button>
+			<button className="button" onClick={() => props.onFormSwitch("register")}>
+				Sign-up
+			</button>
+		</div>
 	</div>);
 }
 

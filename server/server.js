@@ -29,13 +29,12 @@ db.connect((err)=>{
 
 // Login endpoint
 app.post('/login', (req, res) => {
-  
-  const email = req.body.email;
-  const password = req.body.pass;
+
+  const values = [req.body.email, req.body.pass];
 
   const query = 'select * from users where email = ? and pswd = ?';
   
-  db.query(query, [email, password], (err, result) => {
+  db.query(query, values, (err, result) => {
     if (err) throw err;
 
     if(result.length === 1){
@@ -45,6 +44,23 @@ app.post('/login', (req, res) => {
     }
 
   })
+})
+
+// register endpoint
+app.post('/register', (req,res) => {
+  const values = [req.body.email, req.body.pass, req.body.name, '', new Date()];
+
+  const query = 'INSERT INTO users(email, pswd, username, pfp, created_dt) values (?, ?, ?, ?, ?)';
+
+  db.query(query, values, (err, result) => {
+    if (err) throw err;
+
+    if(result.affectedRows === 1){
+      res.json({success: true, message: "User created!"});
+    } else {
+      res.json({success: false, message: "Something went wrong."});
+    }
+  });
 })
 
 app.listen(port, () => {

@@ -3,7 +3,7 @@ import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 import './form.css';
 
-const LOGIN_URL = '/login';
+const LOGIN_URL = 'http://localhost:3001/login';
 
 function Login(props) {
 
@@ -26,7 +26,7 @@ function Login(props) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post('http://localhost:3001/login', JSON.stringify({email, pass}), {
+			const response = await axios.post(LOGIN_URL, JSON.stringify({email, pass}), {
 				headers: {
 					'Content-Type': 'application/json',
 					withCredentials: true,

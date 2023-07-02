@@ -16,7 +16,7 @@ function Register(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [art, setArt] = useState(false);
+  const [art, setArtist] = useState(false);
   const [err, setErr] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
@@ -45,7 +45,7 @@ function Register(props) {
       setEmail('');
       setPass('');
       setName('');
-      setArt(false);
+      setArtist(false);
      
 
     } catch (err) {
@@ -85,7 +85,7 @@ function Register(props) {
 
         <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="*********" id="password" name="password" autoComplete="off" required/>
         
-        <FormControlLabel control={<Checkbox />} label="Register as an artist?" className="button" value={art} onChange={(e) => setArt(e.target.value)}/>
+        <FormControlLabel control={<Checkbox />} label="Register as an artist?" className="button" value={art} onChange={(e) => setArtist(e.target.value)}/>
 
         <button className="button">
           Register

@@ -27,12 +27,47 @@ function Register(props) {
   useEffect(() => {
     userRef.current.focus();
   }, []);
+
+  const validateForm = () => {
+    let isValid = true;
+    if (name.trim() === "") {
+      setErr("Please enter your name.");
+      isValid = false;
+    } else if (email.trim() === "") {
+      setErr("Please enter your email address.");
+      isValid = false;
+    } else if (!isValidEmail(email.trim())) {
+      setErr("Please enter a valid email address.");
+      isValid = false;
+    } else if (pass.trim() === "") {
+      setErr("Please enter a password.");
+      isValid = false;
+    } else if (!isValidPass(pass.trim())) {
+      setErr("Please enter a valid password address. Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter");
+      isValid = false;
+    }
+    return isValid;
+  };
+
+  const isValidEmail = (email) => {
+    // Email validation logic
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const isValidPass = (email) => {
+    // Password validation logic
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
+  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      errRef.current.focus();
+      return;
+    }
+
     setShowAlert(true);
-
-
 
     try {
       const response = await axios.post(REGISTER_URL, JSON.stringify({name, email, pass}), {

@@ -65,6 +65,10 @@
   font-weight: 500;
 }
 
+.radio-label{
+  color: rgb(0, 255, 242);
+}
+
 .button-container{
   display: flex;
   flex-direction: row;
@@ -94,9 +98,11 @@
   color:red;
 }
 
+/*
 .offscreen{
   display: none;
 }
+*/
 
 /* .button-container>:first-child{
   margin-top: 1em;

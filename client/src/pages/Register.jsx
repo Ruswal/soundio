@@ -3,8 +3,12 @@ import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 import './form.css';
 import { FormControlLabel } from '@mui/material';
-import { FormGroup } from '@mui/material';
-import { Checkbox } from '@mui/material';
+import { RadioGroup } from '@mui/material';
+import { FormControl } from '@mui/material';
+import { FormLabel } from '@mui/material';
+import { Radio } from '@mui/material';
+
+
 
 function Register(props) {
 
@@ -16,7 +20,7 @@ function Register(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [art, setArtist] = useState(false);
+  const [art, setArtist] = useState("");
   const [err, setErr] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
@@ -119,8 +123,23 @@ function Register(props) {
         <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" id="email" name="email" autoComplete="given-name" required/>
 
         <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="*********" id="password" name="password" autoComplete="off" required/>
-        
-        <FormControlLabel control={<Checkbox />} label="Register as an artist?" className="button" value={art} onChange={(e) => setArtist(e.target.value)}/>
+
+
+        <FormControl>
+          <FormLabel  sx={{
+                  color: "white"
+                }}>Register as an artist?</FormLabel>
+          <RadioGroup
+            name="radio-buttons-group"
+            className="button"
+            defaultValue="no"
+            
+            onChange={(e) => setArtist(e.target.value)}
+          >
+            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+            <FormControlLabel value="no" control={<Radio />} label="No" />
+          </RadioGroup>
+        </FormControl>
 
         <button className="button">
           Register

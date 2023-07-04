@@ -39,9 +39,9 @@ app.post('/login', (req, res) => {
     if (err) throw err;
 
     if(result.length === 1){
-      res.json({success: true, message: "Login successful"});
+      res.json({status: true, message: "Login successful"});
     } else {
-      res.json({success: false, message: "Login unsuccessful"});
+      res.json({status: false, message: "User not found."});
     }
 
   })

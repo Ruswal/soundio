@@ -34,6 +34,12 @@ function Register(props) {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      errRef.current.focus();
+      return;
+    }
+
     setShowAlert(true);
 
     try {

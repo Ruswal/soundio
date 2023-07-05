@@ -62,7 +62,7 @@ function Register(props) {
     // Password validation logic
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
-  
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
 

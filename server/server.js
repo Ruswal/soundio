@@ -17,7 +17,7 @@ const db = mysql.createConnection({
   host: process.env.HOST,
   port: process.env.DB_PORT,
   database: process.env.DB,
-  user: process.env.USRNAE,
+  user: process.env.USRNAME,
   password: process.env.PSWD,
   multipleStatements: true,
 });
@@ -74,7 +74,7 @@ app.post('/register', (req,res) => {
       res.json({status:false, message: "E-mail already in-use."});
     }
   });
-  
+
 })
 
 app.listen(port, () => {

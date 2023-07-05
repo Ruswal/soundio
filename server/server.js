@@ -19,6 +19,7 @@ const db = mysql.createConnection({
   database: process.env.DB,
   user: process.env.USRNAE,
   password: process.env.PSWD,
+  multipleStatements: true,
 });
 
 // connection to the database
@@ -33,14 +34,14 @@ app.post('/login', (req, res) => {
   const values = [req.body.email, req.body.pass];
 
   const query = 'select * from users where email = ? and pswd = ?';
-  
+
   db.query(query, values, (err, result) => {
     if (err) throw err;
 
     if(result.length === 1){
-      res.json({success: true, message: "Login successful"});
+      res.json({status: true, message: "Login successful"});
     } else {
-      res.json({success: false, message: "Login unsuccessful"});
+      res.json({status: false, message: "User not found."});
     }
 
   })
@@ -48,19 +49,32 @@ app.post('/login', (req, res) => {
 
 // register endpoint
 app.post('/register', (req,res) => {
-  const values = [req.body.email, req.body.pass, req.body.name, '', new Date()];
 
-  const query = 'INSERT INTO users(email, pswd, username, pfp, created_dt) values (?, ?, ?, ?, ?)';
+  const createUserValues = [req.body.email, req.body.password, req.body.username, '', new Date(), req.body.artist, req.body.genre];
 
-  db.query(query, values, (err, result) => {
-    if (err) throw err;
+  const createUserQuery = 'INSERT INTO users(email, pswd, username, pfp, created_dt, isArtist, makeGenre) values (?, ?, ?, ?, ?, ?, ?)';
 
-    if(result.affectedRows === 1){
-      res.json({success: true, message: "User created!"});
+  const searchExistingEmail = 'SELECT ID FROM users where email = ?'
+
+  db.query(searchExistingEmail, [req.body.email], (err, result) => {
+    if(err) throw err;
+
+    if(result.length === 0) {
+      // create artist query execution
+      db.query(createUserQuery, createUserValues, (err, result) => {
+        if(err) throw err;
+
+        if(result.affectedRows === 1){
+          res.json({status: true, message: "user created!"});
+        } else {
+          res.json({status: false, message: "Something went wrong."});
+        }
+      });
     } else {
-      res.json({success: false, message: "Something went wrong."});
+      res.json({status:false, message: "E-mail already in-use."});
     }
   });
+
 })
 
 app.listen(port, () => {

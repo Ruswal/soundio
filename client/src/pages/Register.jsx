@@ -53,6 +53,7 @@ function Register(props) {
     return isValid;
   };
 
+  
   const isValidEmail = (email) => {
     // Email validation logic
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

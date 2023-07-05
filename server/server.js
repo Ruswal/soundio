@@ -74,7 +74,7 @@ app.post('/register', (req,res) => {
       res.json({status:false, message: "E-mail already in-use."});
     }
   });
-
+  
 })
 
 app.listen(port, () => {

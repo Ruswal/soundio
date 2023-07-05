@@ -57,8 +57,12 @@ function Register(props) {
     // Password validation logic
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
+<<<<<<< HEAD
   
 
+=======
+    
+>>>>>>> 4078e52ff36bde8d80391660673844896590bb1a
   const handleChange = (e) => {
     setArtistChecked(e.target.checked);
     document.getElementById('genre').style.display = 'inline';

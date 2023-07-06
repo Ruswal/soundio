@@ -1,0 +1,129 @@
+.App {
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(48, 48, 48);
+
+  /* Full height */
+  height: 100%;
+
+}
+
+.form-container{
+  background-color: rgb(36,36,36);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+
+  padding-left: 7rem;
+  padding-right: 7rem;
+  filter: none;
+  width: auto;
+}
+
+.registration-form, .login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.label{
+  padding: 0.25rem 0;
+}
+
+.input{
+  background-color: rgb(48, 48, 48);
+  color: rgb(0, 255, 242);
+  margin: 0.5rem;
+  padding: 13px;
+  border:3px;
+  border-style: solid;
+  border-color: rgb(48, 48, 48);
+  border-radius: 7px;
+  width: 250px;
+}
+
+.input:focus{
+  border: 3px;
+  border-style: solid;
+  outline: none;
+  border-color: rgb(0, 255, 242);
+}
+
+.input:focus::placeholder{
+  color: rgb(0, 255, 242);
+}
+
+.formHeader{
+  color: rgb(0, 255, 242);
+  font-size: 55px;
+  font-weight: 500;
+}
+
+.radio-label{
+  color: rgb(0, 255, 242);
+}
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  width: 250px;
+  margin-top: 10px;
+}
+
+.button{
+  border: none;
+  background-color: rgb(48, 48, 48);
+  color: rgb(0, 255, 242);
+  padding: 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 0.5rem;
+}
+
+.button:hover{
+  transition: 150ms;
+  background-color: rgb(0, 255, 242);
+  color: rgb(36,36,36);
+}
+
+.errmessage{
+  color:red;
+}
+
+/*
+.offscreen{
+  display: none;
+}
+*/
+
+/* .button-container>:first-child{
+  margin-top: 1em;
+} */
+
+/* The alert message box */
+.alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.alert.show{
+  display: block;
+}
+

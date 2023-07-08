@@ -17,7 +17,7 @@ const db = mysql.createConnection({
   host: process.env.HOST,
   port: process.env.DB_PORT,
   database: process.env.DB,
-  user: process.env.USRNAE,
+  user: process.env.USRNAME,
   password: process.env.PSWD,
   multipleStatements: true,
 });
@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
     if (err) throw err;
 
     if(result.length === 1){
-      res.json({status: true, message: "Login successful"});
+      res.json({status: true, message: "Login successful", result});
     } else {
       res.json({status: false, message: "User not found."});
     }

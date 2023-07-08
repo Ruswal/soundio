@@ -71,6 +71,9 @@ function Login(props) {
 				<button className="button" onClick={() => props.onFormSwitch("register")}>
 					Sign-up
 				</button>
+				<button className="button" onClick={() => props.onFormSwitch("artist-studio")}>
+					Artist Studio
+				</button>
 			</div>
 		</form>
 	</div>);

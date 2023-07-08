@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 import './form.css';
@@ -27,11 +28,43 @@ function Register(props) {
     userRef.current.focus();
   }, []);
 
+  const validateForm = () => {
+    let isValid = true;
+    if (name.trim() === "") {
+      setErr("Please enter your name.");
+      isValid = false;
+    } else if (email.trim() === "") {
+      setErr("Please enter your email address.");
+      isValid = false;
+    } else if (!isValidEmail(email.trim())) {
+      setErr("Please enter a valid email address.");
+      isValid = false;
+    } else if (pass.trim() === "") {
+      setErr("Please enter a password.");
+      isValid = false;
+    } else if (!isValidPass(pass.trim())) {
+      setErr("Please enter a valid password address. Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter");
+      isValid = false;
+    }
+    return isValid;
+  };
+
+  const isValidEmail = (email) => {
+    // Email validation logic
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const isValidPass = (email) => {
+    // Password validation logic
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
+  };
+
   const handleChange = (e) => {
     setArtistChecked(e.target.checked);
-    document.getElementById('genre').style.display = 'inline';
-    if (!e.target.checked) document.getElementById('genre').style.display = 'none';
+    if (e.target.checked) document.getElementById('genre').disabled = false;
+    else document.getElementById('genre').disabled = true;
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -87,9 +120,9 @@ function Register(props) {
   }
 
   return (
-
     <div className="form-container">
       {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
+
       <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 
       <form className="registration-form" onSubmit={handleSubmit}>
@@ -97,25 +130,23 @@ function Register(props) {
 
         <input className="input" value={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full Name" id="name" name="name" ref = {userRef}autoComplete="given-name" required/>
 
-        <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" id="email" name="email" autoComplete="given-name" required/>
+        <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Enter E-mail" id="email" name="email" autoComplete="given-name" required/>
 
-        <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="*********" id="password" name="password" autoComplete="off" required/>
+        <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter Password" id="password" name="password" autoComplete="off" required/>
 
         <FormControlLabel control={<Checkbox />} id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
 
-        <input className="input" style={{display: 'none'}} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
+        <input className="input" disabled = 'true' value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 
         <button className="button">
           Register
         </button>
-        <button className="button" onClick={() => props.onFormSwitch("login")}>
+        <Link to='/login' className="button" >
           Return to login
-        </button>
+        </Link>
       </form>
-
-
-    </div>);
+    </div>
+  );
 }
 
 export default Register;
-

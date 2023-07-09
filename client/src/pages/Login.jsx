@@ -1,6 +1,6 @@
 import { Switch } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Link, Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 import Register from "./Register.jsx";
@@ -14,6 +14,7 @@ function Login(props) {
 	const authContext = useContext(AuthContext);
 	const userRef = useRef();
 	const errRef = useRef();
+	const navigate = useNavigate();
 
 	const [email, setEmail] = useState("");
 	const [pass, setPass] = useState("");
@@ -40,6 +41,9 @@ function Login(props) {
 			const accessToken = response?.data?.accessToken;
 			// setAuth({email, pass, accessToken});
 			authContext.onLogin(accessToken, response.data.result);
+
+			// route to homepage
+			navigate('/homepage');
 
 			setEmail('');
 			setPass('');

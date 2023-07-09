@@ -42,7 +42,7 @@ function AppRoutes (){
               )
             }
           />
-          <Route path='/' element={<Homepage/>} />
+          <Route path='/homepage' element={<Homepage/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register />}/>
         </Routes>

@@ -37,18 +37,16 @@ function Login(props) {
 				}
 			});
 
-			if (response.status === 200) {
-				const accessToken = response?.data?.accessToken;
-				const roles = response?.data?.roles;
-				setAuth({email, pass, roles, accessToken});
-				authContext.onLogin(accessToken, response.data.result)
+			const accessToken = response?.data?.accessToken;
+			// setAuth({email, pass, accessToken});
+			authContext.onLogin(accessToken, response.data.result);
 
-				setEmail('');
-				setPass('');
-			}
+			setEmail('');
+			setPass('');
+
 		} catch (err) {
-
-			if(!err?.response){
+			console.log(err);
+			if(!err.response){
 				setMessage('No server response.');
 			}else if(err.response?.status === 400){
 				setMessage('Missing email or password');
@@ -67,9 +65,9 @@ function Login(props) {
 			<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
 			<form method="post" className="login-form" onSubmit={handleSubmit}>
 				<p className="formHeader">Soundio</p>
-				<input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
+				<input className="input" value={email} onChange={(e) => setEmail(e.target.value.trim())} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
 
-				<input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
+				<input className="input" value={pass} onChange={(e) => setPass(e.target.value.trim())} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
 
 				<div className = "button-container">
 					<button className="button" type="submit">

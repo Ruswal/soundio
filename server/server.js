@@ -32,11 +32,13 @@ db.connect((err)=>{
 app.post('/login', (req, res) => {
 
   const values = [req.body.email, req.body.pass];
+  console.log(values);
 
   const query = 'select * from users where email = ? and pswd = ?';
 
-  db.query(query, values, (err, result) => {
+  db.query(query, [req.body.email, req.body.pass], (err, result) => {
     if (err) throw err;
+    console.log(result);
 
     if(result.length === 1){
       res.json({status: true, message: "Login successful", result});

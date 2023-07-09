@@ -133,7 +133,7 @@ function Register(props) {
 
         <FormControlLabel control={<Checkbox />} id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
 
-        <input className="input" disabled = 'true' value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
+        <input className="input" disabled = {true} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 
         <button className="button">
           Register

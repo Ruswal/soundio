@@ -3,26 +3,6 @@
   width: 100%;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-
-body {
-  background-color: #581d1d;
-  color: aliceblue;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.App {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  height: 100vh;
-}
-
-
 .content {
   display: flex;
   flex: 1;

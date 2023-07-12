@@ -8,9 +8,7 @@
   border-radius:15px;
   padding-left: 7rem;
   padding-right: 7rem;
-  filter: none;
   width: auto;
-  height: 100%;
 }
 
 .registration-form, .login-form{

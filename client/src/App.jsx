@@ -1,6 +1,6 @@
 // import dependencies
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import AuthContext, { AuthContextProvider } from "./context/AuthProvider";
 
 // import pages

@@ -20,7 +20,10 @@ function FileUploadPage(){
           const formData = new FormData();
           formData.append('file', selectedFile);
           
-          axios.post(REGISTER_URL, formData)
+          fetch('/Uploads', {
+            method: 'POST',
+            body: formData
+          })
             .then((response) => {
               // Handle the response from the server
               console.log(response);

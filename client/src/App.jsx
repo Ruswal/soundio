@@ -9,6 +9,7 @@ import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import FileUploadPage from "./pages/artist-studio";
+import AudioPlayer from './pages/audioPlayer';
 
 function App() {
 
@@ -47,6 +48,7 @@ function AppRoutes (){
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/artist-studio' element={<FileUploadPage />}/>
+          <Route path='/audio' element={<AudioPlayer />} />
         </Routes>
       </Router>
     </div>

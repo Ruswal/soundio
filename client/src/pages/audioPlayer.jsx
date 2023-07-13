@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import "./styles.css";
 import WaveForm from "./WaveForm";
+import "./styles.css";
 
-export default function App() {
+export default function AudioPlayer() {
   const [audioUrl, setAudioUrl] = useState();
   const [analyzerData, setAnalyzerData] = useState(null);
   const audioElmRef = useRef(null);

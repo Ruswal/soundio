@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import './form.css';
+import './style/form.css';
 
 function FileUploadPage(){
 
@@ -19,7 +19,7 @@ function FileUploadPage(){
         if (selectedFile) {
           const formData = new FormData();
           formData.append('file', selectedFile);
-          
+
           fetch('/Uploads', {
             method: 'POST',
             body: formData

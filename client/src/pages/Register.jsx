@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import './form.css';
+import './style/form.css';
 
 function Register(props) {
 

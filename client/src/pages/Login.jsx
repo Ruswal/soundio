@@ -4,13 +4,12 @@ import { Link, Navigate, Route, BrowserRouter as Router, Routes, useNavigate } f
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 import Register from "./Register.jsx";
-import './form.css';
+import './style/form.css';
 
 const LOGIN_URL = 'http://localhost:3001/login';
 
 function Login(props) {
 
-	const {setAuth} = useContext(AuthContext);
 	const authContext = useContext(AuthContext);
 	const userRef = useRef();
 	const errRef = useRef();

@@ -12,12 +12,8 @@ const Sidebar = () => {
 
   const handleCreatePlaylist = async(e) => {
 
-    const fragment = document.createDocumentFragment();
 
-    // const div = fragment.
-
-    document.getElementById('user-playlists').appendChild;
-
+    // TODO: uncomment the following snippet to send a request to the server.
     /* try{
       const response = await axios.post(POST_URL, {
         uid: USER_ID,

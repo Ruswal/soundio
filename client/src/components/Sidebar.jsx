@@ -9,7 +9,6 @@ const Sidebar = () => {
   const POST_URL = 'http://localhost:3001/create-playlist';
 
   const authContext = useContext(AuthContext);
-  console.log(authContext.data[0].isArtist)
 
   const handleCreatePlaylist = async(e) => {
 

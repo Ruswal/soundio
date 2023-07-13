@@ -47,7 +47,7 @@ app.post('/login', (req, res) => {
     }
 
   })
-})
+});
 
 // register endpoint
 app.post('/register', (req,res) => {
@@ -77,7 +77,28 @@ app.post('/register', (req,res) => {
     }
   });
 
-})
+});
+
+app.post('/create-playlist', (req, res) => {
+
+  const createPlaylistValues = [
+    req.body.uid,
+    req.body.playlist_name,
+    req.body.create_by,
+    new Date(),
+  ];
+
+  const createPlaylistQuery = 'INSERT INTO user_playlist (user, name, created_by, created_on) VALUES (?, ?, ?, ?)';
+
+  db.query(createPlaylistQuery, createPlaylistValues, (err, result) => {
+    if(err) throw err;
+
+    if(result.length === 1) res.json({status: true, message: 'playlist created'}, result);
+    else res.json({status: false, message: 'failed to create the playlist'});
+
+  });
+
+});
 
 app.listen(port, () => {
   console.log(`server is listening to ${port}`);

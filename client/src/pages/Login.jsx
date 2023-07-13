@@ -41,9 +41,6 @@ function Login(props) {
 			// setAuth({email, pass, accessToken});
 			authContext.onLogin(accessToken, response.data.result);
 
-			// route to homepage
-			// navigate("/");
-
 			setEmail('');
 			setPass('');
 

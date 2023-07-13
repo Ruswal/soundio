@@ -6,9 +6,10 @@ import './style/logout.css';
 const Logout = () => {
 
 
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+
   const handleLogout = () => {
-    const navigate = useNavigate();
-    const authContext = useContext(AuthContext);
     authContext.onLogout();
     navigate('/login');
   }

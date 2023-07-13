@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001;
 app.use(bodyParser.json());
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true,
+  credentials: true, 
 }));
 
 // database connection setup
@@ -32,20 +32,22 @@ db.connect((err)=>{
 app.post('/login', (req, res) => {
 
   const values = [req.body.email, req.body.pass];
+  console.log(values);
 
   const query = 'select * from users where email = ? and pswd = ?';
 
-  db.query(query, values, (err, result) => {
+  db.query(query, [req.body.email, req.body.pass], (err, result) => {
     if (err) throw err;
+    console.log(result);
 
     if(result.length === 1){
-      res.json({status: true, message: "Login successful"});
+      res.json({status: true, message: "Login successful", result});
     } else {
       res.json({status: false, message: "User not found."});
     }
 
   })
-})
+});
 
 // register endpoint
 app.post('/register', (req,res) => {
@@ -75,7 +77,28 @@ app.post('/register', (req,res) => {
     }
   });
 
-})
+});
+
+app.post('/create-playlist', (req, res) => {
+
+  const createPlaylistValues = [
+    req.body.uid,
+    req.body.playlist_name,
+    req.body.create_by,
+    new Date(),
+  ];
+
+  const createPlaylistQuery = 'INSERT INTO user_playlist (user, name, created_by, created_on) VALUES (?, ?, ?, ?)';
+
+  db.query(createPlaylistQuery, createPlaylistValues, (err, result) => {
+    if(err) throw err;
+
+    if(result.length === 1) res.json({status: true, message: 'playlist created'}, result);
+    else res.json({status: false, message: 'failed to create the playlist'});
+
+  });
+
+});
 
 app.listen(port, () => {
   console.log(`server is listening to ${port}`);

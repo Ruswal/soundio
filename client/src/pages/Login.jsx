@@ -1,15 +1,19 @@
+import { Switch } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import './form.css';
+import Register from "./Register.jsx";
+import './style/form.css';
 
 const LOGIN_URL = 'http://localhost:3001/login';
 
 function Login(props) {
 
-	const {setAuth} = useContext(AuthContext);
+	const authContext = useContext(AuthContext);
 	const userRef = useRef();
 	const errRef = useRef();
+	const navigate = useNavigate();
 
 	const [email, setEmail] = useState("");
 	const [pass, setPass] = useState("");
@@ -33,16 +37,19 @@ function Login(props) {
 				}
 			});
 
-			console.log(JSON.stringify(response?.data));
-
 			const accessToken = response?.data?.accessToken;
-			const roles = response?.data?.roles;
-			setAuth({email, pass, roles, accessToken});
+			// setAuth({email, pass, accessToken});
+			authContext.onLogin(accessToken, response.data.result);
+
+			// route to homepage
+			// navigate("/");
 
 			setEmail('');
 			setPass('');
+
 		} catch (err) {
-			if(!err?.response){
+			console.log(err);
+			if(!err.response){
 				setMessage('No server response.');
 			}else if(err.response?.status === 400){
 				setMessage('Missing email or password');
@@ -55,25 +62,31 @@ function Login(props) {
 		}
 	};
 
+	useEffect(() => {
+		if(authContext.isLoggedIn) navigate('/');
+	}, [authContext.isLoggedIn, navigate]);
+
 // returns the login form.
-	return (<div className="form-container">
-		<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
-		<form method="post" className="login-form" onSubmit={handleSubmit}>
-			<p className="formHeader">Soundio</p>
-			<input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
+	return (
+		<div className="form-container">
+			<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
+			<form method="post" className="login-form" onSubmit={handleSubmit}>
+				<p className="formHeader">Soundio</p>
+				<input className="input" value={email} onChange={(e) => setEmail(e.target.value.trim())} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>
 
-			<input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
+				<input className="input" value={pass} onChange={(e) => setPass(e.target.value.trim())} type="password" placeholder="Enter password" id="password" name="password" autoComplete="off" required/>
 
-			<div className = "button-container">
-				<button className="button" type="submit">
-						Login
-				</button>
-				<button className="button" onClick={() => props.onFormSwitch("register")}>
-					Sign-up
-				</button>
-			</div>
-		</form>
-	</div>);
+				<div className = "button-container">
+					<button className="button" type="submit">
+							Login
+					</button>
+
+					<Link to='/register' className='button'> Sign-up </Link>
+
+				</div>
+			</form>
+		</div>
+	);
 }
 
 export default Login;

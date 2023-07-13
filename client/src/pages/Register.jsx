@@ -1,8 +1,9 @@
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import './form.css';
+import './style/form.css';
 
 function Register(props) {
 
@@ -57,13 +58,11 @@ function Register(props) {
     // Password validation logic
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
-  
   const handleChange = (e) => {
     setArtistChecked(e.target.checked);
     if (e.target.checked) document.getElementById('genre').disabled = false;
     else document.getElementById('genre').disabled = true;
   }
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -119,10 +118,8 @@ function Register(props) {
   }
 
   return (
-
     <div className="form-container">
       {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
-      
       <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 
       <form className="registration-form" onSubmit={handleSubmit}>
@@ -136,19 +133,17 @@ function Register(props) {
 
         <FormControlLabel control={<Checkbox />} id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
 
-        <input className="input" disabled = 'true' value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
+        <input className="input" disabled = {true} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 
         <button className="button">
           Register
         </button>
-        <button className="button" onClick={() => props.onFormSwitch("login")}>
+        <Link to='/login' className="button" >
           Return to login
-        </button>
+        </Link>
       </form>
-
-
-    </div>);
+    </div>
+  );
 }
 
 export default Register;
-

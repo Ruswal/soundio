@@ -1,13 +1,24 @@
 import React from 'react';
+import './style/Sidebar.css';
 
-const Sidebar = () => (
-  <div className="sidebar">
-    <ul>
-    <li>Recommendation</li>
-      <li>My Music</li>
-      <li>Music List</li>
-    </ul>
-  </div>
-);
+const Sidebar = () => {
+
+  const handleCreatePlaylist = () => {
+
+  }
+
+  return(
+    <div className="sidebar-container">
+      <div className='sidebar'>
+        <ul>
+          <li>Home</li>
+          <li>Liked Music</li>
+          <li>play 1</li>
+        </ul>
+        <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
+      </div>
+    </div>
+  );
+}
 
 export default Sidebar;

@@ -71,6 +71,9 @@ function Login(props) {
 				<button className="button" onClick={() => props.onFormSwitch("register")}>
 					Sign-up
 				</button>
+				<button className="button" onClick={() => props.onFormSwitch("App.jsx")}>
+					audio-visualizer
+				</button>
 			</div>
 		</form>
 	</div>);

@@ -37,14 +37,14 @@ function AppRoutes (){
             path='/'
             element={
               isAuthenticated ? (
-                <Navigate to='/' />
+                <Navigate to="/homepage"/>
               ) : (
                 <Navigate to='/login' replace={true} />
               )
             }
           />
-          <Route path='/homepage' element={<Homepage/>} />
-          <Route path='/login' element={<Login/>}/>
+          <Route path="/homepage" element={<Homepage />} />
+          <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/artist-studio' element={<FileUploadPage />}/>
         </Routes>

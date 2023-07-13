@@ -42,7 +42,7 @@ function Login(props) {
 			authContext.onLogin(accessToken, response.data.result);
 
 			// route to homepage
-			navigate('/homepage');
+			// navigate("/");
 
 			setEmail('');
 			setPass('');
@@ -61,6 +61,10 @@ function Login(props) {
 			errRef.current.focus();
 		}
 	};
+
+	useEffect(() => {
+		if(authContext.isLoggedIn) navigate('/');
+	}, [authContext.isLoggedIn, navigate]);
 
 // returns the login form.
 	return (

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import axios from '../api/axios';
 import AuthContext from '../context/AuthProvider';
 import './style/Sidebar.css';
@@ -8,12 +9,13 @@ const Sidebar = () => {
   const POST_URL = 'http://localhost:3001/create-playlist';
 
   const authContext = useContext(AuthContext);
+  console.log(authContext.data[0].isArtist)
 
   const handleCreatePlaylist = async(e) => {
 
     const fragment = document.createDocumentFragment();
 
-    const div = fragment.
+    // const div = fragment.
 
     document.getElementById('user-playlists').appendChild;
 
@@ -39,10 +41,12 @@ const Sidebar = () => {
 
           <div>Home</div>
           <div>Liked Music</div>
-          <div>play 1</div>
-
+          <div>
+            {authContext.data[0].isArtist ? (<Link to='/artist-studio'> Artist Studio </Link>
+            ):(<> </>)}
+          </div>
           <div className='user-playlist-container'>
-            <div id='user-playlists' className='user-playlists'>Your Playlist</div>
+            <div id='user-playlists' className='user-playlists'>Your Playlists</div>
           </div>
 
         <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>

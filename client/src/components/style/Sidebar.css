@@ -15,8 +15,8 @@
   color: white;
 }
 
-.sidebar>div:not(first-child){
-  margin-top: 15px;
+.user-playlist-container{
+  margin-top: 35px;
 }
 
 .user-playlists{

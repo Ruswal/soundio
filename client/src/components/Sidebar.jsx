@@ -36,10 +36,10 @@ const Sidebar = () => {
 
           <div>Home</div>
           <div>Liked Music</div>
-          {/* <div>
+          <div>
             {authContext.data[0].isArtist ? (<Link to='/artist-studio'> Artist Studio </Link>
             ):(<> </>)}
-          </div> */}
+          </div>
           <div className='user-playlist-container'>
             <div id='user-playlists' className='user-playlists'>Your Playlists</div>
           </div>

@@ -3,13 +3,15 @@ const express = require ('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
-const app = express();
+const {Storage} = require('@google-cloud/storage');
 const port = process.env.PORT || 3001;
+
+const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true, 
+  credentials: true,
 }));
 
 // database connection setup
@@ -79,6 +81,7 @@ app.post('/register', (req,res) => {
 
 });
 
+// create playlist endpoint
 app.post('/create-playlist', (req, res) => {
 
   const createPlaylistValues = [
@@ -99,6 +102,35 @@ app.post('/create-playlist', (req, res) => {
   });
 
 });
+
+// upload song endpoint
+app.post('/upload', (req, res) => {
+  const reqBody = req.body;
+  const storage = new Storage();
+  const bucketName = 'soundio-songs';
+
+  const extractFilename = (path) => {
+    if (path.substr(0, 12) == "C:\\fakepath\\")
+      return path.substr(12); // modern browser
+    var x;
+    x = path.lastIndexOf('/');
+    if (x >= 0) // Unix-based path
+      return path.substr(x+1);
+    x = path.lastIndexOf('\\');
+    return path; // just the filename
+  }
+
+  const uploadFile = async() => {
+    const options = {
+      destination: reqBody.songName,
+    }
+    await storage.bucket(bucketName).upload(reqBody.localFileDestination, options);
+
+    console.log(`${reqBody.localFileDestination} uploaded to ${bucketName}`)
+  }
+  console.log(reqBody);
+  uploadFile().catch(console.error);
+})
 
 app.listen(port, () => {
   console.log(`server is listening to ${port}`);

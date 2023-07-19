@@ -43,6 +43,9 @@ const Sidebar = () => {
           <div className='user-playlist-container'>
             <div id='user-playlists' className='user-playlists'>Your Playlists</div>
           </div>
+          <div>
+            <Link to='../pages/Audio.jsx'> audio </Link>
+          </div>
 
         <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
       </div>

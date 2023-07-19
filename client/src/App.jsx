@@ -1,5 +1,6 @@
 // import dependencies
 import React, { useContext, useEffect, useState } from "react";
+import { ReactSession } from 'react-client-session';
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import AuthContext, { AuthContextProvider } from "./context/AuthProvider";
 
@@ -11,6 +12,7 @@ import Register from "./pages/Register";
 import FileUploadPage from "./pages/artist-studio";
 
 function App() {
+  ReactSession.setStoreType('localStorage');
 
   return(
     <AuthContextProvider>

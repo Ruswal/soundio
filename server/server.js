@@ -3,13 +3,18 @@ const express = require ('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
-const app = express();
+const fs = require('fs')
+const {Storage} = require('@google-cloud/storage');
+const formidable = require('formidable');
 const port = process.env.PORT || 3001;
+const multer = require ('multer');
+
+const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true, 
+  credentials: true,
 }));
 
 // database connection setup
@@ -79,6 +84,7 @@ app.post('/register', (req,res) => {
 
 });
 
+// create playlist endpoint
 app.post('/create-playlist', (req, res) => {
 
   const createPlaylistValues = [
@@ -99,6 +105,90 @@ app.post('/create-playlist', (req, res) => {
   });
 
 });
+
+// upload song endpoint
+
+/**
+ * TODO(developer):
+ *  1. Uncomment and replace these variables before running the sample.
+ *  2. Set up ADC as described in https://cloud.google.com/docs/authentication/external/set-up-adc
+ *  3. Make sure you have the necessary permission to list storage buckets "storage.buckets.list"
+ *    (https://cloud.google.com/storage/docs/access-control/iam-permissions#bucket_permissions)
+ */
+const projectId = 'canvas-advice-391121';
+
+async function authenticateImplicitWithAdc() {
+  // This snippet demonstrates how to list buckets.
+  // NOTE: Replace the client created below with the client required for your application.
+  // Note that the credentials are not specified when constructing the client.
+  // The client library finds your credentials using ADC.
+  const storage = new Storage({
+    projectId,
+  });
+  const [buckets] = await storage.getBuckets();
+  console.log('Buckets:');
+
+  for (const bucket of buckets) {
+    console.log(`- ${bucket.name}`);
+  }
+
+  console.log('Listed all storage buckets.');
+}
+
+const multerStorage = multer.diskStorage({
+  destination: function(req, file, callback){
+    callback(null, __dirname + '/uploads');
+  },
+  filename: function(req, file, callback){
+    callback(null, file.originalname);
+  }
+})
+
+// const uploads = multer({storage: multerStorage});
+const uploads = multer({dest: __dirname + '/uploads'});
+
+// authenticateImplicitWithAdc();
+app.post('/upload', uploads.array('files'), (req, res) => {
+
+  authenticateImplicitWithAdc();
+
+  const storage = new Storage();
+  const bucketName = 'soundio-songs';
+  const URL = '/server/uploads/' + req.files[0].filename;
+
+  console.log(req.files[0].filename);
+  const uploadSongValues = [
+    req.body.songName,
+    URL,
+    req.body.songGenre,
+    new Date(),
+  ];
+
+  const uploadSongQuery = 'INSERT INTO songs(name, url, genre, upload_dt) VALUES (?, ?, ?, ?)'
+
+  db.query(uploadSongQuery, uploadSongValues, (err, result) => {
+    if(err) throw err;
+
+    if (result.length === 1) { res.json({status: true, message: 'Song uploaded successfully'}) }
+    else { res.json({status: false, message: 'Failed to upload song.'}) }
+  })
+
+
+  // console.log(__dirname + '/uploads/' + req.files[1].filename)
+
+
+  // const uploadFile = async() => {
+  //   const options = {
+  //     destination: reqBody.songName + '.mp3',
+  //   }
+  //   await storage.bucket(bucketName).upload(reqBody.localFileDestination, options);
+
+  //   console.log(`${reqBody.localFileDestination} uploaded to ${bucketName}`)
+  // }
+  // fs.close();
+
+  // uploadFile().catch(console.error);
+})
 
 app.listen(port, () => {
   console.log(`server is listening to ${port}`);

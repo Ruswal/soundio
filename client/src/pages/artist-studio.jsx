@@ -8,6 +8,7 @@ import './style/form.css';
 const FileUploadPage = () => {
 
 	const authContext = useContext(AuthContext);
+	console.log(authContext.data);
 	const songNameRef = useRef();
 	const genreRef = useRef();
 	const errRef = useRef();
@@ -37,24 +38,32 @@ const FileUploadPage = () => {
 
   const handleSubmission = async(e) => {
 		e.preventDefault();
-		// const filepath = e.target.;
 
-		const uploadFile = new FileReader();
-		uploadFile.readAsArrayBuffer(selectedFile);
-		cons
+		const songName = document.getElementById('songName');
+		const songGenre = document.getElementById('songGenre');
+		const files = document.getElementById('files');
+
+		const formData = new FormData();
+		formData.append('songName', songName.value);
+		formData.append('songGenre', songGenre.value);
+		formData.append('userID', authContext.data[0].ID);
+		for (let index = 0; index < files.files.length; index++) {
+			formData.append('files', files.files[index]);
+		}
+
 		try {
-			const response = await axios.post(POST_URL,{
-				songName: songName,
-				songGenre: songGenre,
-				localFileDestination: uploadFile,
-			}, {
+			const response = await axios(
+			{
+				method: 'POST',
+				url: POST_URL,
+				data: formData,
 				headers: {
-					'Content-Type': 'application/json',
-
+					'Content-Type': 'multipart/form-data',
 				}
 			});
 			setSongName('');
 			setSongGenre('');
+			setIsFileSelected(false);
 		} catch (err) {
 			console.log(err);
 			if(!err.response){
@@ -72,8 +81,6 @@ const FileUploadPage = () => {
     if (selectedFile) {
       const formData = new FormData();
       formData.append('file', selectedFile);
-
-
     }
   };
 
@@ -83,18 +90,18 @@ const FileUploadPage = () => {
 
 			<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
 
-			<input className='input' type='text' name='songName' placeholder='Enter song name' onChange={(e) => setSongName(e.target.value)} value={songName} ref={songNameRef} required/>
+			<input id='songName' className='input' type='text' name='songName' placeholder='Enter song name' onChange={(e) => setSongName(e.target.value)} value={songName} ref={songNameRef} required/>
 
-			<input className='input' type='text' name='songGenre' placeholder='Enter song genre' onChange={ (e) => setSongGenre(e.target.value) } value={songGenre} ref={genreRef} required/>
+			<input id='songGenre' className='input' type='text' name='songGenre' placeholder='Enter song genre' onChange={ (e) => setSongGenre(e.target.value) } value={songGenre} ref={genreRef} required/>
 
-			<input id='fileInput' className="input" type="file" name="file" onChange={changeHandler} required/>
+			<input id='files' className="input" type="file" name="fileInput" onChange={changeHandler} required/>
 
 			{isFileSelected ? (
 				<div className='file-info-container'>
 					<div>Filename: {selectedFile.name}</div>
 					<div>Filetype: {selectedFile.type}</div>
 					<div>Size in bytes: {selectedFile.size}</div>
-          <div>filepath: {document.getElementById('fileInput').value}</div>
+          <div>filepath: {document.getElementById('files').value}</div>
 				</div>
 			) : (
 				<p>Select a file to show details</p>

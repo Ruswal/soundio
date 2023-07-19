@@ -87,12 +87,7 @@ app.post('/register', (req,res) => {
 // create playlist endpoint
 app.post('/create-playlist', (req, res) => {
 
-  const createPlaylistValues = [
-    req.body.uid,
-    req.body.playlist_name,
-    req.body.create_by,
-    new Date(),
-  ];
+  const createPlaylistValues = req.body;
 
   const createPlaylistQuery = 'INSERT INTO user_playlist (user, name, created_by, created_on) VALUES (?, ?, ?, ?)';
 

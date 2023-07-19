@@ -9,16 +9,19 @@ const Sidebar = () => {
   const POST_URL = 'http://localhost:3001/create-playlist';
 
   const authContext = useContext(AuthContext);
+  const USER_ID = authContext.data[0].ID;
+  const USER_NAME = authContext.data[0].username;
 
   const handleCreatePlaylist = async(e) => {
 
 
     // TODO: uncomment the following snippet to send a request to the server.
-    /* try{
+    try{
       const response = await axios.post(POST_URL, {
         uid: USER_ID,
         create_by: USER_NAME,
         playlist_name: playlist_name,
+        created_on: new Date(),
       }, {
         headers:{
           'Content-Type': 'application/json',
@@ -27,7 +30,7 @@ const Sidebar = () => {
       })
     }catch(err){
       console.log(err);
-    } */
+    }
   }
 
   return(

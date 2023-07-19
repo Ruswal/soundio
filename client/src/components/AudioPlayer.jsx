@@ -1,8 +1,21 @@
+import { useState } from 'react';
+import { tracks } from '../pages/data/tracks';
+
+// import components
+import DisplayTrack from './DisplayTrack';
+import Controls from './Controls';
+import ProgressBar from './ProgressBar';
+
 const AudioPlayer = () => {
-    return (
-      <div className="audio-player">
-        <div className="inner">Audio player content</div>
+  const [currentTrack, setCurrentTrack] = useState(tracks[0]);
+  return (
+    <div className="audio-player">
+      <div className="inner">
+        <DisplayTrack currentTrack={currentTrack} />
+        <Controls />
+        <ProgressBar />
       </div>
-    );
-  };
-  export default AudioPlayer;
+    </div>
+  );
+};
+export default AudioPlayer;

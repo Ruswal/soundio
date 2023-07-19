@@ -8,7 +8,6 @@ import './style/form.css';
 const FileUploadPage = () => {
 
 	const authContext = useContext(AuthContext);
-	console.log(authContext.data);
 	const songNameRef = useRef();
 	const genreRef = useRef();
 	const errRef = useRef();

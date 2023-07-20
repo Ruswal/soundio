@@ -6,11 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "jsx && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preinstall": "npx npm-force-resolutions"
   },
+    "resolutions": {
+      "minimist": "1.2.3",
+      "mkdir": "0.5.3"
+  },
+
   "dependencies": {
     "@google-cloud/storage": "^6.12.0",
-    "antd": "^5.6.1",
+    "antd": "^5.7.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "react": "^18.2.0",

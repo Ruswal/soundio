@@ -119,7 +119,7 @@ function Register(props) {
 
   return (
     <div className="form-container">
-      {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
+      {showAlert && (<div className="alert">Registration successful</div>)}
       <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 
       <form className="registration-form" onSubmit={handleSubmit}>

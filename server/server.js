@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
     }
 
   })
-});
+}); 
 
 // register endpoint
 app.post('/register', (req,res) => {

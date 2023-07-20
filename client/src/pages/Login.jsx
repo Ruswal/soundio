@@ -17,17 +17,20 @@ function Login(props) {
 	const [email, setEmail] = useState("");
 	const [pass, setPass] = useState("");
 	const [message, setMessage] = useState("");
+	const [err, setErr] = useState('');
+	
 
 	useEffect(() => {
 		userRef.current.focus();
 	}, []);
 
 	useEffect(() => {
-		setMessage('');
+		setErr('');
 	}, [email, pass]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		
 		try {
 			const response = await axios.post(LOGIN_URL, JSON.stringify({email, pass}), {
 				headers: {
@@ -35,30 +38,37 @@ function Login(props) {
 					withCredentials: true,
 				}
 			});
+			if (!response.data.status) {
+				setErr('Login Failed, Missing email or password');
 
-			const accessToken = response?.data?.token;
-			localStorage.setItem('userID', response.data.ID);
-			// setAuth({email, pass, accessToken});
-			authContext.onLogin(accessToken, response.data.result);
+			}else{
+				const accessToken = response?.data?.token;
+				localStorage.setItem('userID', response.data.ID);
+				// setAuth({email, pass, accessToken});
+				authContext.onLogin(accessToken, response.data.result);
+				setEmail('');
+				setPass('');
+				// sessionStorage.setItem('userID', response.data.result[0].ID);
+			}
+			errRef.current.focus();
 
-			// sessionStorage.setItem('userID', response.data.result[0].ID);
 
-			setEmail('');
-			setPass('');
 
 		} catch (err) {
 			console.log(err);
 			if(!err.response){
-				setMessage('No server response.');
+				setErr('No server response.');
 			}else if(err.response?.status === 400){
-				setMessage('Missing email or password');
+				setErr('Missing email or password');
 			}else if(err.response?.status === 401){
-				setMessage('unauthorized');
+				setErr('unauthorized');
 			}else{
-				setMessage('Login Failed');
+				setErr('Login Failed');
 			}
 			errRef.current.focus();
 		}
+
+
 	};
 
 	useEffect(() => {
@@ -68,7 +78,7 @@ function Login(props) {
 // returns the login form.
 	return (
 		<div className="form-container">
-			<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>
+			<p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 			<form method="post" className="login-form" onSubmit={handleSubmit}>
 				<p className="formHeader">Soundio</p>
 				<input className="input" value={email} onChange={(e) => setEmail(e.target.value.trim())} type="email" placeholder="Enter E-mail" id="email" ref={userRef} name="email" autoComplete="given-name" required/>

@@ -15,6 +15,12 @@
   color: white;
 }
 
+.clickable>div{
+  margin-top: 1rem;
+  padding: 0.5rem;
+  color: white;
+}
+
 .user-playlist-container{
   margin-top: 35px;
 }

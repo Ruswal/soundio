@@ -84,7 +84,7 @@ const FileUploadPage = () => {
   };
 
 	return(
-   <div className="form-container">
+   <div className="form-container artist-studio-container">
       <p className="formHeader">Artist Studio</p>
 
 			<p ref={errRef} className={message ? "errmessage" : "offscreen"} aria-live='assertive'>{message}</p>

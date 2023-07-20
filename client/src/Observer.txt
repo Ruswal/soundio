@@ -1,0 +1,71 @@
+class MusicPlayer {
+    constructor() {
+        this.observers = [];
+        this.playlist = [];
+        this.currentSong = null;
+    }
+
+    addObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    removeObserver(observer) {
+        const observerIndex = this.observers.indexOf(observer);
+        if (observerIndex > -1) {
+            this.observers.splice(observerIndex, 1);
+        }
+    }
+
+    notifyObservers() {
+        for (let observer of this.observers) {
+            observer.update(this.currentSong);
+        }
+    }
+
+    play() {
+        // Logic to play music
+        this.notifyObservers();
+    }
+
+    pause() {
+        // Logic to pause music
+        this.notifyObservers();
+    }
+
+    next() {
+        // Logic to play next song
+        this.notifyObservers();
+    }
+
+    prev() {
+        // Logic to play previous song
+        this.notifyObservers();
+    }
+
+    addSong(song) {
+        this.playlist.push(song);
+    }
+
+    removeSong(song) {
+        const songIndex = this.playlist.indexOf(song);
+        if (songIndex > -1) {
+            this.playlist.splice(songIndex, 1);
+        }
+    }
+}
+
+class MusicVisualizer {
+    constructor() {
+        this.currentSong = null;
+        this.visualization = null;
+    }
+
+    update(currentSong) {
+        this.currentSong = currentSong;
+        this.visualize();
+    }
+
+    visualize() {
+        // Logic to visualize the current song
+    }
+}

@@ -1,0 +1,44 @@
+.homepage-container{
+  width: 100%;
+  max-height: 100vh;
+}
+
+.homepage{
+  display: flex;
+  flex: 1;
+  height:92.5vh;
+  width: 100%;
+}
+
+.sidebar-holder{
+  flex: 0 0 15%;
+  height: 100%;
+}
+
+.main-holder{
+  flex: 0 0 85%;
+}
+
+.music-grid {
+  background: #140303;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.music-item {
+  flex: 0 0 calc(33.33% - 20px);
+  border: 1px solid #462b2b;
+  padding: 50px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.clickable>div:hover{
+  cursor: pointer;
+  background-color: rgba(0, 255, 242, 0.60);
+  transition: 0.4s;
+}

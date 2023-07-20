@@ -1,0 +1,39 @@
+.sidebar-container{
+  background-color: rgb(48, 48, 48);
+  height:100%;
+}
+
+.sidebar {
+  background: rgb(36, 36, 36);
+  padding: 1rem;
+  font-size: 20px;
+  height: inherit;
+}
+
+.sidebar>div{
+  padding: 4px;
+  color: white;
+}
+
+.clickable>div{
+  margin-top: 1rem;
+  padding: 0.5rem;
+  color: white;
+}
+
+.user-playlist-container{
+  margin-top: 35px;
+}
+
+.user-playlists{
+  border:rgb(0, 255, 255);
+  border-width: 10px;
+}
+
+.createPlaylist{
+  position: absolute;
+  left: 1%;
+  right: 86%;
+  bottom: 2%;
+}
+

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import './form.css';
+import './style/form.css';
 
 function Register(props) {
 
@@ -118,7 +119,6 @@ function Register(props) {
   }
 
   return (
-
     <div className="form-container">
       {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
 
@@ -138,19 +138,17 @@ function Register(props) {
         <label for='artist-checkbox'>Register as an artist?</label>
         </div>
 
-        <input className="input" disabled = 'true' value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
+        <input className="input" disabled = {true} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 
         <button className="button">
           Register
         </button>
-        <button className="button" onClick={() => props.onFormSwitch("login")}>
+        <Link to='/login' className="button" >
           Return to login
-        </button>
+        </Link>
       </form>
-
-
-    </div>);
+    </div>
+  );
 }
 
 export default Register;
-

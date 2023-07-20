@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
-import Register from "./Register.jsx";
 import './style/form.css';
 
 const LOGIN_URL = 'http://localhost:3001/login';
@@ -37,9 +36,12 @@ function Login(props) {
 				}
 			});
 
-			const accessToken = response?.data?.accessToken;
+			const accessToken = response?.data?.token;
+			localStorage.setItem('userID', response.data.ID);
 			// setAuth({email, pass, accessToken});
 			authContext.onLogin(accessToken, response.data.result);
+
+			// sessionStorage.setItem('userID', response.data.result[0].ID);
 
 			setEmail('');
 			setPass('');

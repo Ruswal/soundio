@@ -54,7 +54,7 @@ const Homepage = () => {
         <div className='sidebar-holder'>
           <div className="sidebar-container">
             <div className='sidebar'>
-
+              <div className='clickable'>
                 <div id='Discover' onClick = {(e)=> {changeElement(e.target.id)}}>Home</div>
                 <div>Liked Music</div>
 
@@ -65,6 +65,7 @@ const Homepage = () => {
                     </div>
                   ) : <> </>
                 }
+              </div>
 
                 <div className='user-playlist-container'>
                   <div id='user-playlists' className='user-playlists'>Your Playlists</div>

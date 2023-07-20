@@ -1,4 +1,3 @@
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
@@ -131,7 +130,10 @@ function Register(props) {
 
         <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter Password" id="password" name="password" autoComplete="off" required/>
 
-        <FormControlLabel control={<Checkbox />} id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
+        <div className='input button'>
+        <input type='checkbox' id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
+        <label for='artist-checkbox'>Register as an artist?</label>
+        </div>
 
         <input className="input" disabled = {true} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 

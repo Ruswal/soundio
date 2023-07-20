@@ -14,15 +14,18 @@ import NewPlaylist from '../components/NewPlaylist';
 
 const Homepage = () => {
 
-   const POST_URL = 'http://localhost:3001/create-playlist';
+  const POST_URL = 'http://localhost:3001/create-playlist';
   const [component, setComponent] = useState('');
 
   const authContext = useContext(AuthContext);
-  const USER_ID = authContext.data[0].ID;
-  const USER_NAME = authContext.data[0].username;
+
+  const userData = JSON.parse(localStorage.getItem('data'));
+  console.log(userData[0].ID);
+
+  const USER_ID = userData[0].ID;
+  const USER_NAME = userData[0].username;
 
   const changeElement = (e) => {
-    console.log(e);
     setComponent(e);
   }
 
@@ -76,7 +79,7 @@ const Homepage = () => {
                 <div>Liked Music</div>
 
                 {
-                  authContext.data[0].isArtist ? (
+                  true ? (
                     <div id='FileUploadPage' onClick = {(e) => {changeElement(e.target.id)}}>
                       Artist Studio
                     </div>
@@ -98,7 +101,7 @@ const Homepage = () => {
         <div className='main-holder'>
           {
             component == 'FileUploadPage' ? <FileUploadPage/> :
-            component == 'Discover' ? <MusicGrid/> : <> </>
+            component == 'Discover' ? <MusicGrid/> : <MusicGrid/>
           }
         </div>
       </div>

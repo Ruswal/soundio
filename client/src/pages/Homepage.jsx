@@ -9,6 +9,8 @@ import './style/Sidebar.css';
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';
 import FileUploadPage from './artist-studio.jsx';
+import NewPlaylist from '../components/NewPlaylist';
+
 
 const Homepage = () => {
 
@@ -25,7 +27,6 @@ const Homepage = () => {
   }
 
   const handleCreatePlaylist = async(e) => {
-
 
     // TODO: uncomment the following snippet to send a request to the server.
     try{
@@ -47,7 +48,23 @@ const Homepage = () => {
 
   // console.log(authContext.data);
 
-  return(
+  const [playlists, setPlaylists] = useState([]);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+
+  const createNewPlaylist = (playlist_name) => {
+    setPlaylists([...playlists, {name: playlist_name}]);
+    setCurrentPlaylist(playlists.length); // Set current playlist to the new playlist
+  };
+
+  const viewPlaylist = (index) => {
+    setCurrentPlaylist(index);
+  };
+
+  const viewMusicGrid = () => {
+    setCurrentPlaylist(null);
+  };
+
+  return (
     <div className='homepage-container'>
       <Header/>
       <div className='homepage'>
@@ -87,7 +104,6 @@ const Homepage = () => {
       </div>
     </div>
   );
-
 }
 
 export default Homepage;

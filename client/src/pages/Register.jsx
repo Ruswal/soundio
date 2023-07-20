@@ -1,4 +1,3 @@
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
@@ -57,13 +56,13 @@ function Register(props) {
     // Password validation logic
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
-  
+
   const handleChange = (e) => {
     setArtistChecked(e.target.checked);
     if (e.target.checked) document.getElementById('genre').disabled = false;
     else document.getElementById('genre').disabled = true;
   }
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -122,7 +121,7 @@ function Register(props) {
 
     <div className="form-container">
       {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
-      
+
       <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 
       <form className="registration-form" onSubmit={handleSubmit}>
@@ -134,7 +133,10 @@ function Register(props) {
 
         <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter Password" id="password" name="password" autoComplete="off" required/>
 
-        <FormControlLabel control={<Checkbox />} id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
+        <div className='input button'>
+        <input type='checkbox' id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
+        <label for='artist-checkbox'>Register as an artist?</label>
+        </div>
 
         <input className="input" disabled = 'true' value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
 

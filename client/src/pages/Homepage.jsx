@@ -4,6 +4,7 @@ import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
 
 import "./style/homepage.css";
+import './style/Sidebar.css';
 
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';

@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '../assets/Logo.png';
 import Logout from './Logout';
 import './style/Header.css';
-import Logo from './Logo.png';
+
 
 
 const Header = () => (

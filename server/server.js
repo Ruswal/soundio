@@ -194,9 +194,18 @@ app.post('/search', (req, res) => {
 
   db.query(searchQuery, searchValue, (err, result) => {
     if(err) throw (err)
-    console.log(result);
+    res.send(res);
   })
 
+})
+
+app.get('/get-songs', (req, res) => {
+  const getSongsQuery = 'SELECT * FROM songs';
+
+  db.query(getSongsQuery, (err, result) => {
+    if(err) throw err;
+    res.send(result);
+  })
 })
 
 app.listen(port, () => {

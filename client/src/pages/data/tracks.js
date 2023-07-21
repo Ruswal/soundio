@@ -8,7 +8,7 @@ import unlock from './unlock-me-149058.mp3';
 import summer from './summer-walk-152722.mp3';
 
 // audio thumbnails
-import ftp from './ftp.jpeg';
+import ftp from './ftp.jpg'
 
 //tracks array
 export const tracks = [

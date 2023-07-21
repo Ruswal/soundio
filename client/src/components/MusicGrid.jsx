@@ -1,13 +1,21 @@
 import React from 'react';
+import tracks from '../pages/data/tracks';
 
 const MusicGrid = () => {
-  const musicList = ['Music 1', 'Music 2', 'Music 3', 'Music 4', 'Music 5', 'Music 6', 'Music 7', 'Music 8', 'Music 9'];  // This can be your actual data
+  const musicList = tracks;  // This can be your actual data
+
+  const handlePlay = (url) => {
+    const audioPlayer = new Audio(url);
+    audioPlayer.play();
+  };
 
   return (
     <div className="music-grid">
       {musicList.map((music, index) => (
         <div className="music-item" key={index}>
-          {music}
+          <div className="music-name">{music.title}</div>
+          <div className="music-name">{music.author}</div>
+          <button onClick={() => handlePlay(music.src)}>Play</button>
         </div>
       ))}
     </div>

@@ -35,7 +35,7 @@ const Homepage = () => {
       <Header/>
       <div className='homepage'>
         <div className='sidebar-holder'>
-          <Sidebar playlists={playlists} createNewPlaylist={createNewPlaylist} viewPlaylist={viewPlaylist} viewMusicGrid={viewMusicGrid} />
+         <Sidebar playlists={playlists} setPlaylists={setPlaylists} createNewPlaylist={createNewPlaylist} viewPlaylist={viewPlaylist} viewMusicGrid={viewMusicGrid} />
         </div>
         <div className='main-holder'>
           {currentPlaylist !== null ? <NewPlaylist playlist={playlists[currentPlaylist]} /> : <MusicGrid />}

@@ -1,12 +1,100 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './style/NewPlaylist.css';
 
 const NewPlaylist = ({ playlist }) => {
+  const [playlistState, setPlaylistState] = useState([]);
+  const [selectedSongs, setSelectedSongs] = useState([]);
+
+  const addMusic = (musicData) => {
+    // Clone the current playlist state
+    const updatedPlaylist = [...playlistState];
+    // Append the new music to the playlist
+    updatedPlaylist.push(musicData);
+    // Update the state with the new playlist
+    setPlaylistState(updatedPlaylist);
+  };
+
+  const toggleLike = (songId) => {
+    // Find the index of the song in the playlist
+    const songIndex = playlistState.findIndex((song) => song.id === songId);
+    if (songIndex !== -1) {
+      // Clone the current playlist state
+      const updatedPlaylist = [...playlistState];
+      // Toggle the like state for the song
+      updatedPlaylist[songIndex].liked = !updatedPlaylist[songIndex].liked;
+      // Update the state with the new playlist
+      setPlaylistState(updatedPlaylist);
+    }
+  };
+
+  const removeSongs = () => {
+    // Filter out the selected songs from the playlist
+    const updatedPlaylist = playlistState.filter(
+      (song) => !selectedSongs.includes(song.id)
+    );
+    // Update the state with the new playlist
+    setPlaylistState(updatedPlaylist);
+    // Clear the selected songs
+    setSelectedSongs([]);
+  };
+
+  const handleSelectSong = (songId) => {
+    // Toggle the selected state for the song
+    setSelectedSongs((prevSelectedSongs) =>
+      prevSelectedSongs.includes(songId)
+        ? prevSelectedSongs.filter((id) => id !== songId)
+        : [...prevSelectedSongs, songId]
+    );
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+     // donot have the logic to get information yet
+      const musicData = {
+        id: Date.now(), 
+        name: file.name,
+        author: 'Unknown',
+        time: '00:00',
+        liked: false,
+      };
+
+      addMusic(musicData);
+    }
+  };
+
   return (
-    <div>
+    <div className = "body">
       <h1>{playlist.name}</h1>
-      {/* More code to display the playlist */}
+      <div className="file-input-container">
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={removeSongs}>Remove Selected Songs</button>
+      {playlistState.length === 0 ? (
+        <p>No songs in the playlist. Add some music!</p>
+      ) : (
+        playlistState.map((song) => (
+          <div key={song.id} className="song-container">
+            
+            <div className= "item">{song.name}</div>
+            <div className= "item">Author: {song.author}</div>
+            <div className= "item"> Time: {song.time}</div>
+            <div className="item">
+            <button onClick={() => toggleLike(song.id)}>
+              {song.liked ? 'Unlike' : 'Like'}
+            </button>
+            <input
+              type="checkbox"
+              onChange={() => handleSelectSong(song.id)}
+              checked={selectedSongs.includes(song.id)}
+            />
+            
+            </div>
+          </div>
+        ))
+      )}
+    </div>
     </div>
   );
-}
+};
 
 export default NewPlaylist;

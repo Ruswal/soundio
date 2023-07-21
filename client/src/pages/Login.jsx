@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthProvider.jsx";
 import './style/form.css';
 
 // const LOGIN_URL = 'http://localhost:3001/login';
-const LOGIN_URL = 'https://canvas-advice-391121.wm.r.appspot.com/login';
+const LOGIN_URL = 'https://server-dot-canvas-advice-391121.wm.r.appspot.com/login';
 
 function Login(props) {
 

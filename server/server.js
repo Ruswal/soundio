@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
     }
 
   })
-}); 
+});
 
 // register endpoint
 app.post('/register', (req,res) => {
@@ -183,6 +183,20 @@ app.post('/upload', uploads.array('files'), (req, res) => {
   // fs.close();
 
   // uploadFile().catch(console.error);
+})
+
+app.post('/search', (req, res) => {
+
+  const searchValue = req.body.value + '%';
+  console.log(searchValue);
+
+  const searchQuery = 'SELECT name FROM songs WHERE name LIKE ?'
+
+  db.query(searchQuery, searchValue, (err, result) => {
+    if(err) throw (err)
+    console.log(result);
+  })
+
 })
 
 app.listen(port, () => {

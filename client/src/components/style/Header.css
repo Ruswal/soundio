@@ -8,7 +8,7 @@
   }
 
   .logo-container {
-    display: flex;;
+    display: flex;
     align-items: left;
   }
 
@@ -17,12 +17,11 @@
     width: 150px;
   }
 
-  .search {
-    flex: 2;
-    margin: 0 20px;
+  .searchbar-container {
+    position: left;
+    /* margin-left: 100px; */
   }
 
-  .logout {
-    flex: 1;
+  .logout-container {
     text-align: right;
   }

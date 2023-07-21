@@ -17,7 +17,15 @@ const Homepage = () => {
 
   const authContext = useContext(AuthContext);
 
-  const userData = JSON.parse(localStorage.getItem('data'));
+  const userDataString = localStorage.getItem('data');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  if (userData && userData.length > 0) {
+    console.log(userData[0].ID);
+  } else {
+    console.log("userData is null or empty");
+  } 
+  
   console.log(userData[0].ID);
 
   const USER_ID = userData[0].ID;

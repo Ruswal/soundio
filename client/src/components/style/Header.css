@@ -1,13 +1,20 @@
 .header {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
     align-items: center;
     padding: 20px;
     background-color: #505251;
   }
 
-  .logo {
-    flex: 1;
+  .logo-container {
+    display: flex;;
+    align-items: left;
+  }
+
+  .logo{
+    height: 50px;
+    width: 150px;
   }
 
   .search {

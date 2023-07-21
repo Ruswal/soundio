@@ -2,6 +2,7 @@ import { default as React, ReactDOM, useContext, useEffect, useRef, useState } f
 import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
 import AuthContext from "../context/AuthProvider.jsx";
+import AudioPlayer from "../components/AudioPlayer.jsx";
 
 import "./style/homepage.css";
 import './style/Sidebar.css';
@@ -82,7 +83,7 @@ const Homepage = () => {
                   <div id='user-playlists' className='user-playlists'>Your Playlists</div>
                 </div>
                 <div>
-                  <Link to='../pages/Audio.jsx'> audio </Link>
+                  <Link to='../components/AudioPlayer.jsx'> audio </Link>
                 </div>
 
               <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
@@ -94,6 +95,9 @@ const Homepage = () => {
             component == 'FileUploadPage' ? <FileUploadPage/> :
             component == 'Discover' ? <MusicGrid/> : <MusicGrid/>
           }
+        </div>
+        <div className = 'footer'>
+          <AudioPlayer/>
         </div>
       </div>
     </div>

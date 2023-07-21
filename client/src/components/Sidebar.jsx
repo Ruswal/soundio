@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../api/axios';
 import AuthContext from '../context/AuthProvider';
-import './style/Sidebar.css';
+//import './style/Sidebar.css';
 
 const Sidebar = () => {
 

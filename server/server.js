@@ -12,8 +12,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(cors({
-  // origin: 'http://localhost:5173',
-  origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
+  origin: 'http://localhost:5173',
+  // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 
@@ -205,6 +205,17 @@ app.get('/get-songs', (req, res) => {
   db.query(getSongsQuery, (err, result) => {
     if(err) throw err;
     res.send(result);
+  })
+})
+
+app.post('/get-playlists', (req, res) => {
+  const user_id = req.body.user_id;
+  const getPlaylistsQuery = 'SELECT * from user_playlist where user = ?';
+
+  db.query(getPlaylistsQuery, user_id, (err, result) => {
+    if(err) throw err;
+    res.send(result);
+    console.log(result);
   })
 })
 

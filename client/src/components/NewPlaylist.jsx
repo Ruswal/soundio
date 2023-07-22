@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import './style/NewPlaylist.css';
 
 const NewPlaylist = ({ playlist }) => {
@@ -48,7 +48,7 @@ const NewPlaylist = ({ playlist }) => {
     );
   };
 
-  const handleFileChange = (event) => {
+/*   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       // Use FileReader to read the content of the file
@@ -71,7 +71,7 @@ const NewPlaylist = ({ playlist }) => {
       // Read the file as a Data URL
       reader.readAsDataURL(file);
     }
-  };
+  }; */
 
   const handlePlayMusic = (songId) => {
     const song = playlistState.find((song) => song.id === songId);
@@ -91,7 +91,7 @@ const NewPlaylist = ({ playlist }) => {
     <div className="body">
       <h1>{playlist.name}</h1>
       <div className="file-input-container">
-        <input type="file" onChange={handleFileChange} />
+        {/* <input type="file" onChange={handleFileChange} /> */}
         <button onClick={removeSongs}>Remove Selected Songs</button>
         {playlistState.length === 0 ? (
           <p>No songs in the playlist. Add some music!</p>

@@ -1,6 +1,6 @@
-import { default as React, useContext, useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { default as React, useContext, useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
 import AudioPlayer from "../components/AudioPlayer.jsx";
 import AuthContext from "../context/AuthProvider.jsx";
@@ -10,8 +10,8 @@ import './style/Sidebar.css';
 
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';
+import NewPlaylist from '../components/NewPlaylist';
 import FileUploadPage from './artist-studio.jsx';
-import NewPlaylist from '../components/NewPlaylist'; 
 
 const Homepage = () => {
 
@@ -46,7 +46,7 @@ const Homepage = () => {
     setCurrentPlaylist(newPlaylist.length - 1);
   };
 
-   /* try {
+/*    try {
       const response = await axios.post(POST_URL, {
         uid: USER_ID,
         create_by: USER_NAME,
@@ -60,7 +60,7 @@ const Homepage = () => {
     } catch(err) {
       console.log(err);
     } */
-  
+
 
   const handleEditPlaylistName = (index, newName) => {
     let updatedPlaylists = [...playlists];
@@ -76,22 +76,37 @@ const Homepage = () => {
   const handleChangeTempName = (e) => {
     setTempPlaylistName(e.target.value);
   }
-  
+
+  // get all the songs for the discover page when window loads.
   const getSongs = async() => {
-
     const GET_SONGS_URL = 'http://localhost:3001/get-songs'
-
     try{
       const response = await axios.get(GET_SONGS_URL)
       console.log(response);
     }catch(err){
       console.log(err);
     }
+  }
 
+  // get all the user's playlist when the window loads.
+  const getPlaylists = async () => {
+    const GET_PLAYLISTS = 'http://localhost:3001/get-playlists';
+    try {
+      const response = await axios.post(GET_PLAYLISTS, {
+        user_id: USER_ID,
+      },{
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return(
-    <div className='homepage-container'>
+    <div className='homepage-container' onLoad={() => {getPlaylists(); getSongs();}}>
       <Header/>
       <div className='homepage'>
         <div className='sidebar-holder'>
@@ -139,7 +154,7 @@ const Homepage = () => {
         <div className='main-holder'>
           {
            component === 'FileUploadPage' ? <FileUploadPage/> :
-           component === 'Discover' ? <MusicGrid/> : 
+           component === 'Discover' ? <MusicGrid/> :
            currentPlaylist !== null ? <NewPlaylist playlist={playlists[currentPlaylist]} /> : <MusicGrid/>
           }
         </div>

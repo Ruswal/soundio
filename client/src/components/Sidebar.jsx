@@ -4,6 +4,7 @@ import axios from '../api/axios';
 import AuthContext from '../context/AuthProvider';
 //import './style/Sidebar.css';
 
+
 const Sidebar = ({ playlists, setPlaylists, createNewPlaylist, viewPlaylist, viewMusicGrid }) => {
 
   const POST_URL = 'http://localhost:3001/create-playlist';
@@ -16,6 +17,7 @@ const Sidebar = ({ playlists, setPlaylists, createNewPlaylist, viewPlaylist, vie
   const [tempPlaylistName, setTempPlaylistName] = useState('');
 
   const handleCreatePlaylist = async(e) => {
+
     const defaultPlaylistName = 'New Playlist';
 
     createNewPlaylist(defaultPlaylistName);
@@ -68,11 +70,7 @@ const Sidebar = ({ playlists, setPlaylists, createNewPlaylist, viewPlaylist, vie
               </div>
             ))}
           </div>
-          <div>
-            <Link to='../pages/Audio.jsx'> audio </Link>
-          </div>
-
-        <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
+          <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
       </div>
     </div>
   );

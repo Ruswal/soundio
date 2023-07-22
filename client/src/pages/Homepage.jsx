@@ -10,6 +10,8 @@ import './style/Sidebar.css';
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';
 import FileUploadPage from './artist-studio.jsx';
+import NewPlaylist from '../components/NewPlaylist';
+
 
 const Homepage = () => {
 
@@ -37,7 +39,6 @@ const Homepage = () => {
   }
 
   const handleCreatePlaylist = async(e) => {
-
 
     // TODO: uncomment the following snippet to send a request to the server.
     try{

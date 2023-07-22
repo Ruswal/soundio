@@ -4,15 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const {Storage} = require('@google-cloud/storage');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT||3001;
 const multer = require ('multer');
 
 const app = express();
 
 app.use(bodyParser.json());
+
 app.use(cors({
-  origin: 'http://localhost:5173',
-  // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
+  // origin: 'http://localhost:5173',
+  origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 

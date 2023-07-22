@@ -1,6 +1,7 @@
-import { default as React, ReactDOM, useContext, useEffect, useRef, useState } from "react";
-import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import axios from '../api/axios.js';
+import { default as React, useContext, useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 import AudioPlayer from "../components/AudioPlayer.jsx";
 import AuthContext from "../context/AuthProvider.jsx";
 
@@ -10,10 +11,10 @@ import './style/Sidebar.css';
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';
 import FileUploadPage from './artist-studio.jsx';
+import NewPlaylist from '../components/NewPlaylist'; 
 
 const Homepage = () => {
 
-  const POST_URL = 'http://localhost:3001/create-playlist';
   const [component, setComponent] = useState('');
 
   const authContext = useContext(AuthContext);
@@ -21,42 +22,45 @@ const Homepage = () => {
   const userDataString = localStorage.getItem('data');
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
-  if (userData && userData.length > 0) {
-    console.log(userData[0].ID);
-  } else {
-    console.log("userData is null or empty");
-  }
-
-  console.log(userData[0].ID);
-
-  const USER_ID = userData[0].ID;
-  const USER_NAME = userData[0].username;
+  const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
+  const USER_NAME = userData && userData.length > 0 ? userData[0].username : null;
 
   const changeElement = (e) => {
     setComponent(e);
   }
 
-  const handleCreatePlaylist = async(e) => {
+  const [playlists, setPlaylists] = useState([]);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+  const [editMode, setEditMode] = useState(null);
+  const [tempPlaylistName, setTempPlaylistName] = useState('');
 
-
-    // TODO: uncomment the following snippet to send a request to the server.
-    try{
-      const response = await axios.post(POST_URL, {
-        uid: USER_ID,
-        create_by: USER_NAME,
-        playlist_name: playlist_name,
-        created_on: new Date(),
-      }, {
-        headers:{
-          'Content-Type': 'application/json',
-          withCredentials: false,
-        }
-      })
-    }catch(err){
-      console.log(err);
-    }
+  const handleCreatePlaylist = () => {
+    const defaultPlaylistName = 'New Playlist';
+    createNewPlaylist(defaultPlaylistName);
+    setEditMode(playlists.length);
   }
 
+  const createNewPlaylist = (playlist_name) => {
+    const newPlaylist = [...playlists, {name: playlist_name}];
+    setPlaylists(newPlaylist);
+    setCurrentPlaylist(newPlaylist.length - 1);
+  };
+
+  const handleEditPlaylistName = (index, newName) => {
+    let updatedPlaylists = [...playlists];
+    updatedPlaylists[index].name = newName;
+    setPlaylists(updatedPlaylists);
+    setEditMode(null);
+  }
+
+  const viewPlaylist = (index) => {
+    setCurrentPlaylist(index);
+  };
+
+  const handleChangeTempName = (e) => {
+    setTempPlaylistName(e.target.value);
+  }
+  
   const getSongs = async() => {
 
     const GET_SONGS_URL = 'http://localhost:3001/get-songs'
@@ -71,7 +75,7 @@ const Homepage = () => {
   }
 
   return(
-    <div className='homepage-container' onLoad={getSongs}>
+    <div className='homepage-container'>
       <Header/>
       <div className='homepage'>
         <div className='sidebar-holder'>
@@ -86,13 +90,28 @@ const Homepage = () => {
                     <div id='FileUploadPage' onClick = {(e) => {changeElement(e.target.id)}}>
                       Artist Studio
                     </div>
-                  ) : <> </>
+                  ) : null
                 }
               </div>
 
-                <div className='user-playlist-container'>
-                  <div id='user-playlists' className='user-playlists'>Your Playlists</div>
-                </div>
+            <div className='user-playlist-container'>
+            <div id='user-playlists' className='user-playlists'>Your Playlists</div>
+            {playlists.map((playlist, index) => (
+              <div key={index}>
+                {editMode === index ? (
+                  <div>
+                    <input type='text' value={tempPlaylistName} onChange={handleChangeTempName} />
+                    <button onClick={() => handleEditPlaylistName(index, tempPlaylistName)}>Save</button>
+                  </div>
+                ) : (
+                  <div onClick={() => viewPlaylist(index)}>
+                    {playlist.name}
+                    <button onClick={() => { setEditMode(index); setTempPlaylistName(playlist.name); }}>Edit</button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
                 <div>
                   <Link to='../components/AudioPlayer.jsx'> audio </Link>
                 </div>
@@ -103,8 +122,9 @@ const Homepage = () => {
         </div>
         <div className='main-holder'>
           {
-            component == 'FileUploadPage' ? <FileUploadPage/> :
-            component == 'Discover' ? <MusicGrid/> : <MusicGrid/>
+           component === 'FileUploadPage' ? <FileUploadPage/> :
+           component === 'Discover' ? <MusicGrid/> : 
+           currentPlaylist !== null ? <NewPlaylist playlist={playlists[currentPlaylist]} /> : <MusicGrid/>
           }
         </div>
         <div className = 'footer'>

@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js",
     "client": "vite",
     "dev": "concurrently \"npm run client\"",
     "build": "tsc && vite build",

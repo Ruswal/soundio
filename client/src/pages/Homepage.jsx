@@ -1,6 +1,7 @@
 import { default as React, ReactDOM, useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
+import AudioPlayer from "../components/AudioPlayer.jsx";
 import AuthContext from "../context/AuthProvider.jsx";
 
 import "./style/homepage.css";
@@ -19,7 +20,15 @@ const Homepage = () => {
 
   const authContext = useContext(AuthContext);
 
-  const userData = JSON.parse(localStorage.getItem('data'));
+  const userDataString = localStorage.getItem('data');
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  if (userData && userData.length > 0) {
+    console.log(userData[0].ID);
+  } else {
+    console.log("userData is null or empty");
+  }
+
   console.log(userData[0].ID);
 
   const USER_ID = userData[0].ID;
@@ -49,26 +58,21 @@ const Homepage = () => {
     }
   }
 
-  // console.log(authContext.data);
+  const getSongs = async() => {
 
-  const [playlists, setPlaylists] = useState([]);
-  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+    const GET_SONGS_URL = 'http://localhost:3001/get-songs'
 
-  const createNewPlaylist = (playlist_name) => {
-    setPlaylists([...playlists, {name: playlist_name}]);
-    setCurrentPlaylist(playlists.length); // Set current playlist to the new playlist
-  };
+    try{
+      const response = await axios.get(GET_SONGS_URL)
+      console.log(response);
+    }catch(err){
+      console.log(err);
+    }
 
-  const viewPlaylist = (index) => {
-    setCurrentPlaylist(index);
-  };
+  }
 
-  const viewMusicGrid = () => {
-    setCurrentPlaylist(null);
-  };
-
-  return (
-    <div className='homepage-container'>
+  return(
+    <div className='homepage-container' onLoad={getSongs}>
       <Header/>
       <div className='homepage'>
         <div className='sidebar-holder'>
@@ -91,7 +95,7 @@ const Homepage = () => {
                   <div id='user-playlists' className='user-playlists'>Your Playlists</div>
                 </div>
                 <div>
-                  <Link to='../pages/Audio.jsx'> audio </Link>
+                  <Link to='../components/AudioPlayer.jsx'> audio </Link>
                 </div>
 
               <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
@@ -103,6 +107,9 @@ const Homepage = () => {
             component == 'FileUploadPage' ? <FileUploadPage/> :
             component == 'Discover' ? <MusicGrid/> : <MusicGrid/>
           }
+        </div>
+        <div className = 'footer'>
+          <AudioPlayer/>
         </div>
       </div>
     </div>

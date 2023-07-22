@@ -1,21 +1,27 @@
 .header {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
     align-items: center;
     padding: 20px;
     background-color: #505251;
   }
 
-  .logo {
-    flex: 1;
+  .logo-container {
+    display: flex;
+    align-items: left;
   }
 
-  .search {
-    flex: 2;
-    margin: 0 20px;
+  .logo{
+    height: 50px;
+    width: 150px;
   }
 
-  .logout {
-    flex: 1;
+  .searchbar-container {
+    position: left;
+    /* margin-left: 100px; */
+  }
+
+  .logout-container {
     text-align: right;
   }

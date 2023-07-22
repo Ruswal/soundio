@@ -4,9 +4,8 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "server": "nodemon ./server/server.js",
     "client": "vite",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run client\"",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -28,6 +27,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
     "react-router-dom": "^6.14.2"
   },
   "devDependencies": {

@@ -42,3 +42,7 @@
   background-color: rgba(0, 255, 242, 0.60);
   transition: 0.4s;
 }
+
+.footer{
+  position: bottom;
+}

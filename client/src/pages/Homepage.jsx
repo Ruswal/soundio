@@ -1,8 +1,8 @@
 import { default as React, ReactDOM, useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import axios from '../api/axios.js';
-import AuthContext from "../context/AuthProvider.jsx";
 import AudioPlayer from "../components/AudioPlayer.jsx";
+import AuthContext from "../context/AuthProvider.jsx";
 
 import "./style/homepage.css";
 import './style/Sidebar.css';
@@ -10,6 +10,8 @@ import './style/Sidebar.css';
 import Header from '../components/Header';
 import MusicGrid from '../components/MusicGrid';
 import FileUploadPage from './artist-studio.jsx';
+import NewPlaylist from '../components/NewPlaylist';
+
 
 const Homepage = () => {
 
@@ -25,8 +27,8 @@ const Homepage = () => {
     console.log(userData[0].ID);
   } else {
     console.log("userData is null or empty");
-  } 
-  
+  }
+
   console.log(userData[0].ID);
 
   const USER_ID = userData[0].ID;
@@ -37,7 +39,6 @@ const Homepage = () => {
   }
 
   const handleCreatePlaylist = async(e) => {
-
 
     // TODO: uncomment the following snippet to send a request to the server.
     try{
@@ -57,10 +58,21 @@ const Homepage = () => {
     }
   }
 
-  // console.log(authContext.data);
+  const getSongs = async() => {
+
+    const GET_SONGS_URL = 'http://localhost:3001/get-songs'
+
+    try{
+      const response = await axios.get(GET_SONGS_URL)
+      console.log(response);
+    }catch(err){
+      console.log(err);
+    }
+
+  }
 
   return(
-    <div className='homepage-container'>
+    <div className='homepage-container' onLoad={getSongs}>
       <Header/>
       <div className='homepage'>
         <div className='sidebar-holder'>
@@ -102,7 +114,6 @@ const Homepage = () => {
       </div>
     </div>
   );
-
 }
 
 export default Homepage;

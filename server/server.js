@@ -3,17 +3,17 @@ const express = require ('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
-const fs = require('fs')
 const {Storage} = require('@google-cloud/storage');
-const formidable = require('formidable');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT||3001;
 const multer = require ('multer');
 
 const app = express();
 
 app.use(bodyParser.json());
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  // origin: 'http://localhost:5173',
+  origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 
@@ -194,9 +194,18 @@ app.post('/search', (req, res) => {
 
   db.query(searchQuery, searchValue, (err, result) => {
     if(err) throw (err)
-    console.log(result);
+    res.send(res);
   })
 
+})
+
+app.get('/get-songs', (req, res) => {
+  const getSongsQuery = 'SELECT * FROM songs';
+
+  db.query(getSongsQuery, (err, result) => {
+    if(err) throw err;
+    res.send(result);
+  })
 })
 
 app.listen(port, () => {

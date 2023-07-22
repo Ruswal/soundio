@@ -46,6 +46,22 @@ const Homepage = () => {
     setCurrentPlaylist(newPlaylist.length - 1);
   };
 
+   /* try {
+      const response = await axios.post(POST_URL, {
+        uid: USER_ID,
+        create_by: USER_NAME,
+        playlist_name: playlist_name,
+      }, {
+        headers:{
+          'Content-Type': 'application/json',
+          withCredentials: false,
+        }
+      })
+    } catch(err) {
+      console.log(err);
+    } */
+  
+
   const handleEditPlaylistName = (index, newName) => {
     let updatedPlaylists = [...playlists];
     updatedPlaylists[index].name = newName;

@@ -25,8 +25,14 @@ const Homepage = () => {
   const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
   const USER_NAME = userData && userData.length > 0 ? userData[0].username : null;
 
-  const changeElement = (e) => {
-    setComponent(e);
+  const changeElement = (id) => {
+    if (id === 'Discover') {
+      setCurrentPlaylist(null);
+    }
+    if (id === 'FileUploadPage') {
+      setCurrentPlaylist(null);
+    }
+    setComponent(id);
   }
 
   const [playlists, setPlaylists] = useState([]);
@@ -71,6 +77,7 @@ const Homepage = () => {
 
   const viewPlaylist = (index) => {
     setCurrentPlaylist(index);
+    setComponent('');
   };
 
   const handleChangeTempName = (e) => {
@@ -113,7 +120,7 @@ const Homepage = () => {
           <div className="sidebar-container">
             <div className='sidebar'>
               <div className='clickable'>
-                <div id='Discover' onClick = {(e)=> {changeElement(e.target.id)}}>Home</div>
+                <div id='Discover' onClick = {() => {changeElement('Discover')}}>Home</div>
                 <div>Liked Music</div>
 
                 {
@@ -155,7 +162,7 @@ const Homepage = () => {
           {
            component === 'FileUploadPage' ? <FileUploadPage/> :
            component === 'Discover' ? <MusicGrid/> :
-           currentPlaylist !== null ? <NewPlaylist playlist={playlists[currentPlaylist]} /> : <MusicGrid/>
+           currentPlaylist !== null && <NewPlaylist playlist={playlists[currentPlaylist]} />
           }
         </div>
         <div className = 'footer'>

@@ -25,6 +25,7 @@ const db = mysql.createConnection({
   user: process.env.USRNAME,
   password: process.env.PSWD,
   multipleStatements: true,
+
 });
 
 // connection to the database
@@ -87,19 +88,45 @@ app.post('/register', (req,res) => {
 // create playlist endpoint
 app.post('/create-playlist', (req, res) => {
 
-  const createPlaylistValues = req.body;
-
   const createPlaylistQuery = 'INSERT INTO user_playlist (user, name, created_by, created_on) VALUES (?, ?, ?, ?)';
 
-  db.query(createPlaylistQuery, createPlaylistValues, (err, result) => {
+  const lastInsertedID = 'SELECT LAST_INSERT_ID() as ID';
+
+  db.query(createPlaylistQuery, [
+    req.body.user,
+    req.body.name,
+    req.body.created_by,
+    new Date(),
+  ], (err, result) => {
     if(err) throw err;
-
-    if(result.length === 1) res.json({status: true, message: 'playlist created'}, result);
-    else res.json({status: false, message: 'failed to create the playlist'});
-
+    db.query(lastInsertedID, (err, result) => {
+      if(err) throw err;
+      res.status(200).send(result);
+    })
+    console.log(result);
   });
-
 });
+
+// update playlist name endpoint
+app.post('/update-playlist-name', (req, res) => {
+
+  console.log(req.body)
+
+  const updatePlaylistName = 'UPDATE user_playlist SET name = ? WHERE ID = ? AND user = ?';
+
+  db.query(
+    updatePlaylistName,[
+      req.body.name,
+      req.body.id,
+      req.body.user,
+    ], (err, result) => {
+      if(err) throw err;
+      if(result.length === 1) res.status(200).send(result);
+      else res.status(201).send('no playlist found');
+    });
+});
+
+
 
 // upload song endpoint
 

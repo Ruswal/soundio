@@ -89,20 +89,6 @@ const MusicGrid = ({ songs }) => {
                 <source src={songs.url} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
-              {audioPlayers[index]?.paused ? (
-                <BiPlayCircle
-                  color="#ff5722"
-                  size={70}
-                  className="icons"
-                  onClick={() => handlePlayPause(index)}
-                />
-              ) : (
-                <BiPauseCircle
-                  color="#ff5722"
-                  size={70}
-                  className="icons"
-                  onClick={() => handlePlayPause(index)}
-                />
               )}
             </div>
           ))}

@@ -162,12 +162,12 @@ const multerStorage = multer.diskStorage({
     callback(null, __dirname + '/uploads');
   },
   filename: function(req, file, callback){
-    callback(null, file.originalname);
+    callback(null, Date.now() + '.mp3');
   }
 })
 
 // const uploads = multer({storage: multerStorage});
-const uploads = multer({dest: __dirname + '/uploads'});
+const uploads = multer({storage: multerStorage});
 
 // authenticateImplicitWithAdc();
 app.post('/upload', uploads.array('files'), (req, res) => {

@@ -7,7 +7,6 @@ import {
   BiSkipNextCircle,
   BiSkipPreviousCircle,
 } from "react-icons/bi";
-import "./style/music-grid.css";
 
 const MusicGrid = ({ songs }) => {
   const [audioPlayers, setAudioPlayers] = useState([]);

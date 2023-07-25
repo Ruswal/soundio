@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-
+import React, { useState, useEffect } from "react";
 import {
   BiPlayCircle,
   BiPauseCircle,
@@ -8,14 +6,8 @@ import {
   BiSkipNextCircle,
 } from "react-icons/bi";
 
-const MusicGrid = () => {
+const MusicGrid = ({ songs }) => {
   const [audioPlayers, setAudioPlayers] = useState([]);
-  const [songs, setSongs] = useState([]);
-
-  useEffect(() => {
-    // Fetch songs from the server when the component mounts
-    fetchSongs();
-  }, []);
 
   useEffect(() => {
     // Create audio players for each music item
@@ -27,16 +19,6 @@ const MusicGrid = () => {
       players.forEach((player) => player.pause());
     };
   }, [songs]);
-
-  const fetchSongs = async () => {
-    try {
-      const response = await axios.get("http://localhost:3001/get-songs");
-      setSongs(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching songs:", error);
-    }
-  };
 
   const handlePlayPause = (index) => {
     const newAudioPlayers = [...audioPlayers];
@@ -63,7 +45,6 @@ const MusicGrid = () => {
               <source src={music.url} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
-            {/*
             {audioPlayers[index]?.paused ? (
               <BiPlayCircle
                 color="#ff5722"
@@ -78,7 +59,7 @@ const MusicGrid = () => {
                 className="icons"
                 onClick={() => handlePlayPause(index)}
               />
-            )}*/}
+            )}
           </div>
         ))}
       </div>

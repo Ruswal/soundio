@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  BiPlayCircle,
   BiPauseCircle,
-  BiSkipPreviousCircle,
+  BiPlayCircle,
   BiSkipNextCircle,
+  BiSkipPreviousCircle,
 } from "react-icons/bi";
+import './style/music-grid.css';
 
 const MusicGrid = ({ songs }) => {
   const [audioPlayers, setAudioPlayers] = useState([]);

@@ -6,6 +6,7 @@ const mysql = require('mysql');
 const {Storage} = require('@google-cloud/storage');
 const port = process.env.PORT||3001;
 const multer = require ('multer');
+const path = require("path");
 
 const app = express();
 
@@ -157,9 +158,11 @@ async function authenticateImplicitWithAdc() {
   console.log('Listed all storage buckets.');
 }
 
+
 const multerStorage = multer.diskStorage({
-  destination: function(req, file, callback){
-    callback(null, __dirname + '/uploads');
+  destination: function (req, file, callback) {
+    const uploadDir = path.resolve(__dirname, "../client/uploads");
+    callback(null, uploadDir);
   },
   filename: function(req, file, callback){
     callback(null, Date.now() + '.mp3');
@@ -176,7 +179,7 @@ app.post('/upload', uploads.array('files'), (req, res) => {
 
   const storage = new Storage();
   const bucketName = 'soundio-songs';
-  const URL = '/server/uploads/' + req.files[0].filename;
+  const URL = '/uploads/' + req.files[0].filename;
 
   console.log(req.files[0].filename);
   const uploadSongValues = [

@@ -11,15 +11,32 @@ import {
 const MusicGrid = ({ songs }) => {
   const [audioPlayers, setAudioPlayers] = useState([]);
   const [genreTitle, setGenreTitle] = useState("");
+  // const [genre, setByGenre] = useState([]);
+
+  const playAudio = async (url) => {
+    try {
+      const audioModule = await import(url);
+      const audioPlayer = new Audio(audioModule.default); // Assuming the default export is the URL
+      return audioPlayer;
+    } catch (error) {
+      console.error("Error loading audio:", error);
+    }
+  };
 
   useEffect(() => {
-    // Create audio players for each music item
-    const players = songs.map((music) => new Audio(music.url));
-    setAudioPlayers(players);
+    const createAudioPlayers = async () => {
+      // Create audio players for each music item
+      const players = await Promise.all(
+        songs.map((music) => playAudio(music.url))
+      );
+      setAudioPlayers(players);
+    };
+
+    createAudioPlayers();
 
     return () => {
       // Clean up audio players on unmount
-      players.forEach((player) => player.pause());
+      audioPlayers.forEach((player) => player.pause());
     };
   }, [songs]);
 
@@ -27,7 +44,7 @@ const MusicGrid = ({ songs }) => {
     const newAudioPlayers = [...audioPlayers];
     const audioPlayer = newAudioPlayers[index];
 
-    if (audioPlayer.paused) {
+    if (audioPlayer && audioPlayer.paused) {
       audioPlayer.play();
     } else {
       audioPlayer.pause();
@@ -36,6 +53,14 @@ const MusicGrid = ({ songs }) => {
     setAudioPlayers(newAudioPlayers);
   };
 
+  const getGenre = (songs, gen) => {
+    return songs.filter((songs) => songs.genre === gen);
+  };
+
+  const genreSongs = getGenre(songs, genreTitle);
+  console.log(genreSongs);
+  console.log(songs);
+  console.log(genreTitle);
   return (
     <div>
       <div className="music-grid">
@@ -55,13 +80,13 @@ const MusicGrid = ({ songs }) => {
           </select>
         </div>
         <div className="flex flex-wrap sm:justify-start justify-center gap-8">
-          {songs.map((music, index) => (
+          {genreSongs.map((songs, index) => (
             <div className="music-item" key={index}>
-              <h2 className="music-name">{music.name}</h2>
-              <h4 className="music-name">{music.genre}</h4>
-              <h4 className="music-name">{music.url}</h4>
+              <h2 className="music-name">{songs.name}</h2>
+              <h4 className="music-name">{songs.genre}</h4>
+              <h4 className="music-name">{songs.url}</h4>
               <audio controls>
-                <source src={music.url} type="audio/mpeg" />
+                <source src={songs.url} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
               {audioPlayers[index]?.paused ? (

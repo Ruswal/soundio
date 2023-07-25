@@ -8,10 +8,10 @@ import AuthContext from "../context/AuthProvider.jsx";
 import "./style/homepage.css";
 import "./style/Sidebar.css";
 
+import genre from "../components/genres.jsx";
 import Header from "../components/Header";
 import MusicGrid from "../components/MusicGrid";
 import NewPlaylist from "../components/NewPlaylist";
-import genre from "../components/genres.jsx";
 import FileUploadPage from "./artist-studio.jsx";
 
 const Homepage = () => {
@@ -210,9 +210,8 @@ const Homepage = () => {
               </div>
 
               <div className="user-playlist-container">
-                <div id="user-playlists" className="user-playlists">
                   Your Playlists
-                </div>
+                <div id="user-playlists" className="user-playlists">
                 {userPlaylists.map((userPlaylists, index) => (
                   <div key={index}>
                     {editMode === index ? (
@@ -245,11 +244,8 @@ const Homepage = () => {
                     )}
                   </div>
                 ))}
+                </div>
               </div>
-              <div>
-                <Link to="../components/AudioPlayer.jsx"> audio </Link>
-              </div>
-
               <div
                 className="button createPlaylist"
                 onClick={handleCreatePlaylist}

@@ -23,3 +23,14 @@ export const links = [
   { name: 'Top Artists', to: '/top-artists', icon: HiOutlineUserGroup },
   { name: 'Top Charts', to: '/top-charts', icon: HiOutlineHashtag },
 ];
+
+const SERVER = 'https://server-dot-canvas-advice-391121.wm.r.appspot.com';
+const LOCAL = 'http://localhost:3001'
+
+export const LOGIN = LOCAL + '/login';
+export const REGISTER_URL = LOCAL + '/register';
+export const CREATE_PLAYLIST = LOCAL + '/create-playlist';
+export const UPDATE_PLAYLIST_NAME = LOCAL + '/update-playlist-name';
+export const GET_SONGS = LOCAL + '/get-songs';
+export const GET_PLAYLISTS = LOCAL + '/get-playlists';
+export const UPLOAD = LOCAL + '/upload';

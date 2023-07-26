@@ -232,14 +232,14 @@ const Homepage = () => {
                     ) : (
                       <div onClick={() => viewPlaylist(index)}>
                         {userPlaylists.name}
-                        <button
+                        {/* <button
                           onClick={() => {
                             setEditMode(index);
                             setTempPlaylistName(playlists.name);
                           }}
                         >
                           Edit
-                        </button>
+                        </button> */}
                       </div>
                     )}
                   </div>

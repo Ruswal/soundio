@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import genre from "../components/genres.jsx";
-import "./style/MusicGrid.css";
+import React, { useEffect, useState } from "react";
 import {
   BiPauseCircle,
   BiPlayCircle,
   BiSkipNextCircle,
   BiSkipPreviousCircle,
 } from "react-icons/bi";
+import genre from "../components/genres.jsx";
+import "./style/MusicGrid.css";
 
 const MusicGrid = ({ songs }) => {
   const [audioPlayers, setAudioPlayers] = useState([]);
@@ -79,7 +79,7 @@ const MusicGrid = ({ songs }) => {
             ))}
           </select>
         </div>
-        <div className="flex flex-wrap sm:justify-start justify-center gap-8">
+        <div className="scrollable flex flex-wrap sm:justify-start justify-center gap-8">
           {genreSongs.map((songs, index) => (
             <div className="music-item" key={index}>
               <h2 className="music-name">{songs.name}</h2>
@@ -89,7 +89,7 @@ const MusicGrid = ({ songs }) => {
                 <source src={songs.url} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
-              )}
+              )
             </div>
           ))}
         </div>

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "../api/axios.js";
+import { UPLOAD } from "../assets/constants.js";
+import genre from "../components/genres.jsx";
 import AuthContext from "../context/AuthProvider.jsx";
 import "./style/artistStudio.css";
 import "./style/form.css";
-import genre from "../components/genres.jsx";
 
 const FileUploadPage = () => {
   const authContext = useContext(AuthContext);
@@ -26,7 +27,6 @@ const FileUploadPage = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [isFileSelected, setIsFileSelected] = useState(false);
-  const POST_URL = "http://localhost:3001/upload";
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -52,7 +52,7 @@ const FileUploadPage = () => {
     try {
       const response = await axios({
         method: "POST",
-        url: POST_URL,
+        url: UPLOAD,
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",

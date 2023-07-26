@@ -3,12 +3,11 @@ import { default as React, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AudioPlayer from "../components/AudioPlayer.jsx";
-import AuthContext from "../context/AuthProvider.jsx";
 
 import "./style/homepage.css";
 import "./style/Sidebar.css";
 
-import genre from "../components/genres.jsx";
+import { CREATE_PLAYLIST, GET_PLAYLISTS, GET_SONGS, UPDATE_PLAYLIST_NAME } from "../assets/constants.js";
 import Header from "../components/Header";
 import MusicGrid from "../components/MusicGrid";
 import NewPlaylist from "../components/NewPlaylist";
@@ -18,8 +17,6 @@ const Homepage = () => {
   const [component, setComponent] = useState("");
   const [songs, setSong] = useState([]);
   const [userPlaylists, setUserPlaylists] = useState([]);
-
-  const authContext = useContext(AuthContext);
 
   const userDataString = localStorage.getItem("data");
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -37,7 +34,6 @@ const Homepage = () => {
       setCurrentPlaylist(null);
       setComponent(id);
     }
-    // setComponent(id);
   };
 
   const [playlists, setPlaylists] = useState([]);
@@ -52,9 +48,8 @@ const Homepage = () => {
     createNewPlaylist(defaultPlaylistName);
     setEditMode(playlists.length);
     try {
-      const POST_URL = "http://localhost:3001/create-playlist";
       const response = await axios.post(
-        POST_URL,
+        CREATE_PLAYLIST,
         {
           user: USER_ID,
           name: defaultPlaylistName,
@@ -90,7 +85,7 @@ const Homepage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/update-playlist-name",
+        UPDATE_PLAYLIST_NAME,
         {
           name: updatedPlaylistName,
           id: localStorage.getItem("playlistID"),
@@ -120,9 +115,8 @@ const Homepage = () => {
 
   // get all the songs for the discover page when window loads.
   const getSongs = async () => {
-    const GET_SONGS_URL = "http://localhost:3001/get-songs";
     try {
-      const response = await axios.get(GET_SONGS_URL);
+      const response = await axios.get(GET_SONGS);
       console.log(response);
       return response.data;
     } catch (err) {
@@ -132,7 +126,6 @@ const Homepage = () => {
 
   // get all the user's playlist when the window loads.
   const getPlaylists = async () => {
-    const GET_PLAYLISTS = "http://localhost:3001/get-playlists";
     try {
       const response = await axios.post(
         GET_PLAYLISTS,
@@ -159,7 +152,7 @@ const Homepage = () => {
         const fetchedplaylists = await getPlaylists();
         const fetchedsongs = await getSongs();
         setSong(fetchedsongs);
-        setUserPlaylists(fetchedplaylists);
+        setPlaylists(fetchedplaylists);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -170,8 +163,10 @@ const Homepage = () => {
 
   useEffect(() => {
     console.log("Inside useEffect: songs", songs);
-    console.log("Inside useEffect: playlists", userPlaylists);
-  }, [songs, userPlaylists]);
+    console.log("Inside useEffect: playlists", playlists);
+  }, [songs, playlists]);
+
+  console.log(playlists[1]);
 
   return (
     <div
@@ -210,10 +205,10 @@ const Homepage = () => {
               </div>
 
               <div className="user-playlist-container">
-                  Your Playlists
+                <div className='yourPlaylistTitle'>Your Playlists</div>
                 <div id="user-playlists" className="user-playlists">
-                {userPlaylists.map((userPlaylists, index) => (
-                  <div key={index}>
+                {playlists.map((playlists, index) => (
+                  <div key={index} className="clickable">
                     {editMode === index ? (
                       <div>
                         <input
@@ -231,15 +226,7 @@ const Homepage = () => {
                       </div>
                     ) : (
                       <div onClick={() => viewPlaylist(index)}>
-                        {userPlaylists.name}
-                        {/* <button
-                          onClick={() => {
-                            setEditMode(index);
-                            setTempPlaylistName(playlists.name);
-                          }}
-                        >
-                          Edit
-                        </button> */}
+                        {playlists.name}
                       </div>
                     )}
                   </div>

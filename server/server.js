@@ -169,7 +169,6 @@ const multerStorage = multer.diskStorage({
   }
 })
 
-// const uploads = multer({storage: multerStorage});
 const uploads = multer({storage: multerStorage});
 
 // authenticateImplicitWithAdc();
@@ -245,6 +244,18 @@ app.post('/get-playlists', (req, res) => {
   db.query(getPlaylistsQuery, user_id, (err, result) => {
     if(err) throw err;
     res.send(result);
+    console.log(result);
+  })
+})
+
+app.post('/get-playlist-items', (req, res) => {
+  const id = req.body.playlist;
+  console.log(id);
+  const getPlaylistItems = 'SELECT S.*, P.name AS P_name FROM songs S LEFT JOIN playlist_items PI ON S.ID = PI.song LEFT JOIN user_playlist P ON P.ID = PI.playlist WHERE PI.playlist = ?';
+
+  db.query(getPlaylistItems, id, (err, result) => {
+    if(err) throw err;
+    res.status(200).send(result);
     console.log(result);
   })
 })

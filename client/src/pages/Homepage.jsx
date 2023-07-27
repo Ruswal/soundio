@@ -10,20 +10,24 @@ import "./style/Sidebar.css";
 import { CREATE_PLAYLIST, GET_PLAYLISTS, GET_SONGS, UPDATE_PLAYLIST_NAME } from "../assets/constants.js";
 import Header from "../components/Header";
 import MusicGrid from "../components/MusicGrid";
-import NewPlaylist from "../components/NewPlaylist";
+import ViewPlaylist from "../components/ViewPlaylist.jsx";
 import FileUploadPage from "./artist-studio.jsx";
 
 const Homepage = () => {
   const [component, setComponent] = useState("");
   const [songs, setSong] = useState([]);
   const [userPlaylists, setUserPlaylists] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+  const [editMode, setEditMode] = useState(null);
+  const [tempPlaylistName, setTempPlaylistName] = useState("");
 
   const userDataString = localStorage.getItem("data");
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
   const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
-  const USER_NAME =
-    userData && userData.length > 0 ? userData[0].username : null;
+  const USER_NAME = userData && userData.length > 0 ? userData[0].username : null;
+  const USER_ARTIST = userData && userData.length > 0 ? userData[0].isArtist : null;
 
   const changeElement = (id) => {
     if (id === "Discover") {
@@ -34,14 +38,10 @@ const Homepage = () => {
       setCurrentPlaylist(null);
       setComponent(id);
     }
+    if (id === 'ViewPlaylistItem') {
+      setComponent(id);
+    }
   };
-
-  const [playlists, setPlaylists] = useState([]);
-  const [currentPlaylist, setCurrentPlaylist] = useState(null);
-  const [editMode, setEditMode] = useState(null);
-  const [tempPlaylistName, setTempPlaylistName] = useState("");
-  const initialValue = null;
-  const [newPlaylistID, setNewPlaylistID] = useState(initialValue);
 
   const handleCreatePlaylist = async () => {
     const defaultPlaylistName = "New Playlist";
@@ -104,10 +104,14 @@ const Homepage = () => {
     }
   };
 
-  const viewPlaylist = (index) => {
-    setCurrentPlaylist(index);
-    setComponent("");
+  const viewPlaylist = () => {
+    setComponent('ViewPlaylistItem');
+    setCurrentPlaylist(null);
   };
+
+  useEffect(() => {
+    viewPlaylist(currentPlaylist)
+  }, [currentPlaylist]);
 
   const handleChangeTempName = (e) => {
     setTempPlaylistName(e.target.value);
@@ -117,7 +121,6 @@ const Homepage = () => {
   const getSongs = async () => {
     try {
       const response = await axios.get(GET_SONGS);
-      console.log(response);
       return response.data;
     } catch (err) {
       console.log(err);
@@ -138,8 +141,6 @@ const Homepage = () => {
           },
         }
       );
-      console.log(response);
-      console.log(response.data);
       return response.data;
     } catch (err) {
       console.log(err);
@@ -160,13 +161,6 @@ const Homepage = () => {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log("Inside useEffect: songs", songs);
-    console.log("Inside useEffect: playlists", playlists);
-  }, [songs, playlists]);
-
-  console.log(playlists[1]);
 
   return (
     <div
@@ -192,11 +186,11 @@ const Homepage = () => {
                 </div>
                 <div>Liked Music</div>
 
-                {true ? (
+                {USER_ARTIST ? (
                   <div
                     id="FileUploadPage"
-                    onClick={(e) => {
-                      changeElement(e.target.id);
+                    onClick={() => {
+                      changeElement('FileUploadPage');
                     }}
                   >
                     Artist Studio
@@ -225,7 +219,7 @@ const Homepage = () => {
                         </button>
                       </div>
                     ) : (
-                      <div onClick={() => viewPlaylist(index)}>
+                      <div id={playlists.ID} onClick={(e) => setCurrentPlaylist(e.target.id)}>
                         {playlists.name}
                       </div>
                     )}
@@ -245,16 +239,15 @@ const Homepage = () => {
         <div className="main-holder">
           {component === "FileUploadPage" ? (
             <FileUploadPage />
-          ) : component === "Discover" ? (
+          ) : component === 'ViewPlaylistItem' ? (
+            <ViewPlaylist playlistID={32} />
+          ) : (
             <div>
               <h1>Music Library</h1>
               {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} />}
             </div>
-          ) : (
-            currentPlaylist !== null && (
-              <NewPlaylist playlist={playlists[currentPlaylist]} />
-            )
-          )}
+          )
+          }
         </div>
         <div className="footer">{/*<AudioPlayer /> */}</div>
       </div>

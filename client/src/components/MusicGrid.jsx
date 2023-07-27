@@ -58,9 +58,7 @@ const MusicGrid = ({ songs }) => {
   };
 
   const genreSongs = getGenre(songs, genreTitle);
-  console.log(genreSongs);
-  console.log(songs);
-  console.log(genreTitle);
+
   return (
     <div>
       <div className="music-grid">

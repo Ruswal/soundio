@@ -3,7 +3,9 @@ import { BiHeart, BiSolidBookmarkHeart, BiSolidHeart } from "react-icons/bi";
 import genre from "../components/genres.jsx";
 import "./style/MusicGrid.css";
 
-const MusicGrid = ({ songs }) => {
+const MusicGrid = ({songs, addToPlaylistId}) => {
+
+  // const songs = props.songs;
   const [audioPlayers, setAudioPlayers] = useState([]);
   const [favoritedState, setFavoritedState] = useState([]);
 
@@ -74,10 +76,11 @@ const MusicGrid = ({ songs }) => {
     setFavoritedState(newFavoritedState);
   };
 
-  const handleAddToPlaylist = (index) => {
+  const handleAddToPlaylist = (e) => {
     // You can implement your playlist logic here.
     // For example, you could create a new state for the playlist and add the selected song to it.
-    console.log("Adding song to playlist:", genreSongs[index].name);
+    console.log("Adding song to playlist:", e.target.id);
+    addToPlaylistId = e.target.id;
   };
 
   const genreSongs = getGenre(songs, genreTitle);
@@ -140,9 +143,9 @@ const MusicGrid = ({ songs }) => {
                     Favorite
                   </span>
                 </div>
-                <button
+                <button id={songs.ID}
                   className="button"
-                  onClick={() => handleAddToPlaylist(index)}
+                  onClick={(e) => addToPlaylistId(e.target.id)}
                 >
                   <BiSolidBookmarkHeart />
                   Add to Playlist

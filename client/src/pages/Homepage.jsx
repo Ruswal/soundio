@@ -8,6 +8,7 @@ import "./style/homepage.css";
 import "./style/Sidebar.css";
 
 import { CREATE_PLAYLIST, GET_PLAYLISTS, GET_SONGS, UPDATE_PLAYLIST_NAME } from "../assets/constants.js";
+import AddToPlaylist from "../components/AddToPlaylist.jsx";
 import Header from "../components/Header";
 import MusicGrid from "../components/MusicGrid";
 import ViewPlaylist from "../components/ViewPlaylist.jsx";
@@ -18,9 +19,11 @@ const Homepage = () => {
   const [songs, setSong] = useState([]);
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [playlists, setPlaylists] = useState([]);
+  const initialValue = null;
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
   const [editMode, setEditMode] = useState(null);
   const [tempPlaylistName, setTempPlaylistName] = useState("");
+  const [addToPlaylistId, setAddToPlaylistId] = useState(initialValue);
 
   const userDataString = localStorage.getItem("data");
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -38,10 +41,18 @@ const Homepage = () => {
       setCurrentPlaylist(null);
       setComponent(id);
     }
+    // if(id === 'AddToPlaylist'){
+    //   set
+    // }
     if (id === 'ViewPlaylistItem') {
       setComponent(id);
     }
   };
+
+  useEffect(() => {
+    setComponent('AddToPlaylist');
+    console.log(addToPlaylistId);
+  }, [addToPlaylistId]);
 
   const handleCreatePlaylist = async () => {
     const defaultPlaylistName = "New Playlist";
@@ -104,14 +115,16 @@ const Homepage = () => {
     }
   };
 
-  const viewPlaylist = () => {
+  const viewPlaylist = (e) => {
+    setCurrentPlaylist(e.target.id)
+    console.log('currentPlaylist: ' + currentPlaylist);
     setComponent('ViewPlaylistItem');
-    setCurrentPlaylist(null);
+    // setCurrentPlaylist(null);
   };
 
-  useEffect(() => {
-    viewPlaylist(currentPlaylist)
-  }, [currentPlaylist]);
+  // useEffect((e) => {
+  //   viewPlaylist()
+  // }, [currentPlaylist]);
 
   const handleChangeTempName = (e) => {
     setTempPlaylistName(e.target.value);
@@ -219,7 +232,7 @@ const Homepage = () => {
                         </button>
                       </div>
                     ) : (
-                      <div id={playlists.ID} onClick={(e) => setCurrentPlaylist(e.target.id)}>
+                      <div id={playlists.ID} onClick={(e) => viewPlaylist(e)}>
                         {playlists.name}
                       </div>
                     )}
@@ -240,11 +253,13 @@ const Homepage = () => {
           {component === "FileUploadPage" ? (
             <FileUploadPage />
           ) : component === 'ViewPlaylistItem' ? (
-            <ViewPlaylist playlistID={32} />
+            <ViewPlaylist playlistID={currentPlaylist} />
+          ) : component === 'AddToPlaylist' ? (
+            <AddToPlaylist playlists={playlists}/>
           ) : (
             <div>
               <h1>Music Library</h1>
-              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} />}
+              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = {setAddToPlaylistId} />}
             </div>
           )
           }

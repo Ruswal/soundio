@@ -249,7 +249,7 @@ const Homepage = () => {
           )
           }
         </div>
-        <div className="footer">{/*<AudioPlayer /> */}</div>
+        <div className="footer">{<AudioPlayer />}</div>
       </div>
     </div>
   );

@@ -255,11 +255,11 @@ const Homepage = () => {
           ) : component === 'ViewPlaylistItem' ? (
             <ViewPlaylist playlistID={currentPlaylist} />
           ) : component === 'AddToPlaylist' ? (
-            <AddToPlaylist playlists={playlists}/>
+            <AddToPlaylist playlists={playlists} songID= {addToPlaylistId}/>
           ) : (
             <div>
               <h1>Music Library</h1>
-              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = {setAddToPlaylistId} />}
+              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = { setAddToPlaylistId} />}
             </div>
           )
           }

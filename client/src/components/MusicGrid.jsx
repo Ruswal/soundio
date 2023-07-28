@@ -15,8 +15,8 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
   // const [genre, setByGenre] = useState([]);
+  const sortedSongs = [...songs].sort((a, b) => a.name.localeCompare(b.name));
 
-  const audioRef = React.useRef();
   /*
   const handleTrackChange = (e) => {
     const trackIndex = parseInt(e.target.value);
@@ -26,27 +26,8 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
   };
 */
   useEffect(() => {
-    setCurrentTrack(songs[currentTrackIndex]);
-  }, [currentTrackIndex, songs]);
-  /*
-  useEffect(() => {
-    // Play or pause the audio when the current track changes
-    if (isPlaying) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
-    }
-  }, [currentTrack, isPlaying]);
-*/
-  const handlePlayPause = (index) => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleNext = () => {
-    setCurrentTrackIndex((prevIndex) =>
-      prevIndex === songs.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+    setCurrentTrack(sortedSongs[currentTrackIndex]);
+  }, [currentTrackIndex, sortedSongs]);
 
   const getGenre = (songs, gen) => {
     return songs.filter((songs) => songs.genre === gen);
@@ -65,24 +46,12 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
     addToPlaylistId = e.target.id;
   };
 
-  const sortedSongs = [...songs].sort((a, b) => a.name.localeCompare(b.name));
   const genreSongs = getGenre(songs, genreTitle);
   console.log(genreSongs);
+  console.log(sortedSongs);
   console.log(songs);
   console.log(genreTitle);
   console.log(currentTrack);
-
-  /*
-  const handleFavoriteClick = () => {
-    setIsActive(!isActive);
-    setIsAnimating(true);
-
-    // After a short delay, remove the "is_animating" class to trigger the animation effect
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 300); // You can adjust the duration to match your CSS animation duration
-  };
-  */
 
   return (
     <div>
@@ -92,22 +61,12 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
         </h2>
         <div className="w-full flex justify-between items-center sm:flex-row flex-col mt-4 mb-10">
           <select
-            onChange={(e) => setGenreTitle(e.target.value)}
-            value={genreTitle || "Pop"}
-          >
-            {genre.map((genre) => (
-              <option key={genre.value} value={genre.value}>
-                {genre.title}
-              </option>
-            ))}
-          </select>
-          <select
             onChange={(e) => {
               setCurrentTrackIndex(e.target.value);
             }}
             value={currentTrackIndex}
           >
-            {songs.map((song, index) => (
+            {sortedSongs.map((song, index) => (
               <option key={index} value={index}>
                 {song.name}
               </option>

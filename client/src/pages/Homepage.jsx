@@ -212,7 +212,7 @@ const Homepage = () => {
       onLoad={() => {
         //   getPlaylists();
         //  setSongs(getSongs());
-        setComponent("Discover");
+        //setComponent("Discover");
       }}
     >
       <Header />

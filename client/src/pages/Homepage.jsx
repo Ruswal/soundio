@@ -228,7 +228,6 @@ const Homepage = () => {
                 >
                   Home
                 </div>
-                <div>Liked Music</div>
 
                 {USER_ARTIST ? (
                   <div

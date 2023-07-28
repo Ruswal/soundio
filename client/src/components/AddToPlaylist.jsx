@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../api/axios";
+import { ADD_TO_PLAYLIST } from "../assets/constants";
 import '../pages/style/form.css';
 import './style/MusicGrid.css';
 
-const AddToPlaylist = ({playlists}) => {
+const AddToPlaylist = ({playlists, songID}) => {
 
-	const selectedPlaylist = (e) => {
-		let resultArray = []
-		var id = e.target.id;
-     if(e.target.checked)      //if checked (true), then add this id into checkedList
-     {
-          resultArray = this.state.checkedList.filter(CheckedId=>
-            CheckedId !== id
-          )
-          resultArray.push(id)
-     }
-     else                    //if not checked (false), then remove this id from checkedList
-     {
-        resultArray = this.state.checkedList.filter(CheckedId=>
-            CheckedId !== id
-        )
-     }
-     console.log(resultArray)
+	const [selectedPlaylist, setSelectedPlaylist] = useState({playlistID: []})
+
+	const handleChange = (e) => {
+		const {id, checked} = e.target;
+		const {playlistID} = selectedPlaylist;
+
+		if(checked && playlistID.length == 0){
+			setSelectedPlaylist({
+				playlistID: [id]
+			})
+		} else if(checked) {
+			setSelectedPlaylist({
+				playlistID: [...playlistID, id]
+			});
+		} else {
+			setSelectedPlaylist({
+				playlistID: playlistID.filter((e) => e !== id)
+			})
+		}
   }
 
+	useEffect(() => {
+		console.log(selectedPlaylist.playlistID);
+	}, [selectedPlaylist.playlistID])
+
+	const handleSave = async() => {
+		try{
+			const response = await axios.post(
+				ADD_TO_PLAYLIST, {
+					selectedPlaylist: selectedPlaylist.playlistID,
+					songID: songID,
+				}, {
+					headers: {
+						'Content-Type': 'application/json',
+					}
+				}
+			)
+		} catch(err){
+			console.error(err);
+		}
+	}
 
 	return(
 		<div className="form-container artist-studio-container">
@@ -30,14 +54,14 @@ const AddToPlaylist = ({playlists}) => {
 
 			<div>
 				{playlists.map((playlists, index) => (
-					<div>
-						<input type='checkbox' id={playlists.ID} onChange={(e) => selectedPlaylist(e)}/>
+					<div key={index}>
+						<input type='checkbox' id={playlists.ID} defaultChecked={false} onClick={(e) => handleChange(e)}/>
 						<label className="music-name" for={playlists.ID}>{playlists.name}</label>
 					</div>
 				))}
 			</div>
 
-      <button className="button" onClick={selectedPlaylist}>
+      <button className="button" onClick={handleSave}>
         Save
       </button>
     </div>

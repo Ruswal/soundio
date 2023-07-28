@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 
 import AudioPlayer from "../components/AudioPlayer.jsx";
 
-import "./style/homepage.css";
 import "./style/Sidebar.css";
+import './style/audioPlayer.css';
+import './style/customize-progress-bar.css';
+import "./style/homepage.css";
 
 import { CREATE_PLAYLIST, GET_PLAYLISTS, GET_SONGS, UPDATE_PLAYLIST_NAME } from "../assets/constants.js";
 import AddToPlaylist from "../components/AddToPlaylist.jsx";
@@ -24,6 +26,7 @@ const Homepage = () => {
   const [editMode, setEditMode] = useState(null);
   const [tempPlaylistName, setTempPlaylistName] = useState("");
   const [addToPlaylistId, setAddToPlaylistId] = useState(initialValue);
+  const [currentPlaylistQueue, setCurrentPlaylistQueue] = useState([]);
 
   const userDataString = localStorage.getItem("data");
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -180,6 +183,10 @@ const Homepage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log(currentPlaylistQueue)
+  }, [currentPlaylistQueue])
+
   return (
     <div
       className="homepage-container"
@@ -258,18 +265,18 @@ const Homepage = () => {
           {component === "FileUploadPage" ? (
             <FileUploadPage />
           ) : component === 'ViewPlaylistItem' ? (
-            <ViewPlaylist playlistID={currentPlaylist} />
+            <ViewPlaylist playlistID={currentPlaylist} currentPlaylistQueue = {setCurrentPlaylistQueue}/>
           ) : component === 'AddToPlaylist' ? (
-            <AddToPlaylist playlists={playlists}/>
+            <AddToPlaylist playlists={playlists} songID= {addToPlaylistId}/>
           ) : (
             <div>
               <h1>Music Library</h1>
-              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = {setAddToPlaylistId} />}
+              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = { setAddToPlaylistId} />}
             </div>
           )
           }
         </div>
-        <div className="footer">{<AudioPlayer />}</div>
+        <div className="footer">{<AudioPlayer queue={currentPlaylistQueue} />}</div>
       </div>
     </div>
   );

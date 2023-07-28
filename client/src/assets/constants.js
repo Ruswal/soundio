@@ -35,4 +35,4 @@ export const GET_SONGS = LOCAL + '/get-songs';
 export const GET_PLAYLISTS = LOCAL + '/get-playlists';
 export const UPLOAD = LOCAL + '/upload';
 export const GET_PLAYLISTS_ITEMS = LOCAL + '/get-playlist-items';
-
+export const ADD_TO_PLAYLIST = LOCAL + '/add-to-playlist';

@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: sans-serif;
+    background: #f2f2f2;
+    margin: 0 10px;
+  }
+  
+  .audio-player {
+    background: #c1b6bc;
+  }
+  
+  .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* audio info */
+  .audio-info {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .text {
+    color: #f50;
+  }
+  
+  .title {
+    color: #fff;
+    font-weight: 100;
+    font-size: 32px;
+    margin-bottom: 0;
+    padding: 2px;
+    line-height: 37px;
+    background-color: rgba(0,0,0,.8);
+  }
+  
+  /* controls */
+  .controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .controls button, .volume button {
+    border: none;
+    background-color: transparent;
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  
+  button svg {
+    font-size: 20px;
+  }
+  
+  .volume {
+    display: flex;
+    align-items: center;
+  }
+  
+  .volume button {
+    margin: 0;
+  }
+  
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  /* time */
+  .time {
+    color: #333;
+    font-size: 13px;
+    line-height: 46px;
+  }
+  
+  .time.current {
+    color: #f50;
+  }
+  

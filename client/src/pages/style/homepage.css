@@ -45,4 +45,8 @@
 
 .footer{
   position: bottom;
+  flex: 0 0 85%;
+  bottom: 10px;
+  left: 25%;
+  position: fixed;
 }

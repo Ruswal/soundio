@@ -276,7 +276,7 @@ const Homepage = () => {
           )
           }
         </div>
-        <div className="footer">{<AudioPlayer queue={currentPlaylistQueue} />}</div>
+        {/* <div className="footer">{<AudioPlayer queue={currentPlaylistQueue} />}</div> */}
       </div>
     </div>
   );

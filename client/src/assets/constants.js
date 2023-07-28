@@ -27,12 +27,14 @@ export const links = [
 const SERVER = 'https://server-dot-canvas-advice-391121.wm.r.appspot.com';
 const LOCAL = 'http://localhost:3001'
 
-export const LOGIN = LOCAL + '/login';
-export const REGISTER_URL = LOCAL + '/register';
-export const CREATE_PLAYLIST = LOCAL + '/create-playlist';
-export const UPDATE_PLAYLIST_NAME = LOCAL + '/update-playlist-name';
-export const GET_SONGS = LOCAL + '/get-songs';
-export const GET_PLAYLISTS = LOCAL + '/get-playlists';
-export const UPLOAD = LOCAL + '/upload';
-export const GET_PLAYLISTS_ITEMS = LOCAL + '/get-playlist-items';
-export const ADD_TO_PLAYLIST = LOCAL + '/add-to-playlist';
+const host = LOCAL;
+
+export const LOGIN = host + '/login';
+export const REGISTER_URL = host + '/register';
+export const CREATE_PLAYLIST = host + '/create-playlist';
+export const UPDATE_PLAYLIST_NAME = host + '/update-playlist-name';
+export const GET_SONGS = host + '/get-songs';
+export const GET_PLAYLISTS = host + '/get-playlists';
+export const UPLOAD = host + '/upload';
+export const GET_PLAYLISTS_ITEMS = host + '/get-playlist-items';
+export const ADD_TO_PLAYLIST = host + '/add-to-playlist';

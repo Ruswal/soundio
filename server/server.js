@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const {Storage} = require('@google-cloud/storage');
+const multerGoogleStorage = require('multer-google-storage');
 const port = process.env.PORT||3001;
 const multer = require ('multer');
 const path = require("path");
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: 'http://localhost:5173',
   // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
+  // origin: 'https://canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 
@@ -148,26 +150,35 @@ async function authenticateImplicitWithAdc() {
 }
 
 
-const multerStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    const uploadDir = path.resolve(__dirname, "../client/uploads");
-    callback(null, uploadDir);
-  },
-  filename: function(req, file, callback){
-    callback(null, Date.now() + '.mp3');
-  }
+// const multerStorage = multer.diskStorage({
+//   destination: function (req, file, callback) {
+//     const uploadDir = path.resolve(__dirname, "tmp/uploads");
+//     callback(null, uploadDir);
+//   },
+  // filename: function(req, file, callback){
+  //   callback(null, Date.now() + '.mp3');
+  // }
+// })
+
+var uploadHandler = multer({
+  storage: multerGoogleStorage.storageEngine({
+    autoRetry: true,
+    bucket: 'canvas-advice-391121.appspot.com',
+    projectId:'canvas-advice-391121',
+    keyFilename: './canvas-advice-391121-cbcf758fcae9.json',
+    filename:function(req, file, callback){
+      callback(null, Date.now() + '.mp3');
+    }
+  })
 })
 
-const uploads = multer({storage: multerStorage});
+// const uploads = multer({storage: multerStorage});
 
 // authenticateImplicitWithAdc();
-app.post('/upload', uploads.array('files'), (req, res) => {
+app.post('/upload', uploadHandler.any(), (req, res) => {
+  const URL = req.files[0].path;
 
   authenticateImplicitWithAdc();
-
-  const storage = new Storage();
-  const bucketName = 'soundio-songs';
-  const URL = '/uploads/' + req.files[0].filename;
 
   const uploadSongValues = [
     req.body.songName,
@@ -184,22 +195,6 @@ app.post('/upload', uploads.array('files'), (req, res) => {
     if (result.length === 1) { res.json({status: true, message: 'Song uploaded successfully'}) }
     else { res.json({status: false, message: 'Failed to upload song.'}) }
   })
-
-
-  // console.log(__dirname + '/uploads/' + req.files[1].filename)
-
-
-  // const uploadFile = async() => {
-  //   const options = {
-  //     destination: reqBody.songName + '.mp3',
-  //   }
-  //   await storage.bucket(bucketName).upload(reqBody.localFileDestination, options);
-
-  //   console.log(`${reqBody.localFileDestination} uploaded to ${bucketName}`)
-  // }
-  // fs.close();
-
-  // uploadFile().catch(console.error);
 })
 
 app.post('/search', (req, res) => {

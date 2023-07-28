@@ -1,61 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { BiHeart, BiSolidBookmarkHeart, BiSolidHeart } from "react-icons/bi";
+import AudioPlayer from "./AudioPlayer"; // Import the AudioPlayer component
 import genre from "../components/genres.jsx";
 import "./style/MusicGrid.css";
 
-const MusicGrid = ({songs, addToPlaylistId}) => {
-
+const MusicGrid = ({ songs, addToPlaylistId }) => {
   // const songs = props.songs;
   const [audioPlayers, setAudioPlayers] = useState([]);
   const [favoritedState, setFavoritedState] = useState([]);
-
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [genreTitle, setGenreTitle] = useState("");
+  const [currentTrack, setCurrentTrack] = useState(songs[0]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+
   // const [genre, setByGenre] = useState([]);
 
-  const playAudio = async (url) => {
-    try {
-      const audioModule = await import(url);
-      const audioPlayer = new Audio(audioModule.default); // Assuming the default export is the URL
-      return audioPlayer;
-    } catch (error) {
-      console.error("Error loading audio:", error);
+  const audioRef = React.useRef();
+  /*
+  const handleTrackChange = (e) => {
+    const trackIndex = parseInt(e.target.value);
+    console.log("Track Index:", trackIndex);
+    setCurrentTrack(songs[trackIndex]);
+    setCurrentTrackIndex(trackIndex);
+  };
+*/
+  useEffect(() => {
+    setCurrentTrack(songs[currentTrackIndex]);
+  }, [currentTrackIndex, songs]);
+  /*
+  useEffect(() => {
+    // Play or pause the audio when the current track changes
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
     }
+  }, [currentTrack, isPlaying]);
+*/
+  const handlePlayPause = (index) => {
+    setIsPlaying(!isPlaying);
   };
 
-  useEffect(() => {
-    const createAudioPlayers = async () => {
-      // Create audio players for each music item
-      const players = await Promise.all(
-        songs.map((music) => playAudio(music.url))
-      );
-
-      const initializedPlayers = players.map((player) => ({
-        player,
-        isFavorited: false,
-      }));
-      setAudioPlayers(players);
-      setFavoritedState(new Array(songs.length).fill(false));
-    };
-
-    createAudioPlayers();
-
-    return () => {
-      // Clean up audio players on unmount
-      audioPlayers.forEach((player) => player.pause());
-    };
-  }, [songs]);
-
-  const handlePlayPause = (index) => {
-    const newAudioPlayers = [...audioPlayers];
-    const audioPlayer = newAudioPlayers[index];
-
-    if (audioPlayer && audioPlayer.paused) {
-      audioPlayer.play();
-    } else {
-      audioPlayer.pause();
-    }
-
-    setAudioPlayers(newAudioPlayers);
+  const handleNext = () => {
+    setCurrentTrackIndex((prevIndex) =>
+      prevIndex === songs.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
   const getGenre = (songs, gen) => {
@@ -64,14 +54,6 @@ const MusicGrid = ({songs, addToPlaylistId}) => {
 
   const handleFavoriteClick = (index) => {
     const newFavoritedState = [...favoritedState];
-    const audioPlayer = audioPlayers[index];
-
-    if (audioPlayer && audioPlayer.paused) {
-      audioPlayer.play();
-    } else if (audioPlayer) {
-      audioPlayer.pause();
-    }
-
     newFavoritedState[index] = !newFavoritedState[index];
     setFavoritedState(newFavoritedState);
   };
@@ -83,13 +65,13 @@ const MusicGrid = ({songs, addToPlaylistId}) => {
     addToPlaylistId = e.target.id;
   };
 
+  const sortedSongs = [...songs].sort((a, b) => a.name.localeCompare(b.name));
   const genreSongs = getGenre(songs, genreTitle);
   console.log(genreSongs);
   console.log(songs);
   console.log(genreTitle);
+  console.log(currentTrack);
 
-  const [isActive, setIsActive] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   /*
   const handleFavoriteClick = () => {
     setIsActive(!isActive);
@@ -119,41 +101,48 @@ const MusicGrid = ({songs, addToPlaylistId}) => {
               </option>
             ))}
           </select>
+          <select
+            onChange={(e) => {
+              setCurrentTrackIndex(e.target.value);
+            }}
+            value={currentTrackIndex}
+          >
+            {songs.map((song, index) => (
+              <option key={index} value={index}>
+                {song.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="scrollable flex flex-wrap sm:justify-start justify-center gap-8">
-          {genreSongs.map((songs, index) => (
-            <div className="music-item" key={index}>
-              <h2 className="music-name">{songs.name}</h2>
-              <h4 className="music-name">{songs.genre}</h4>
-              <audio controls>
-                <source src={songs.url} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
-              <div className="flexbox">
-                <div
-                  className={`favme ${
-                    favoritedState[index] ? "active button" : "button"
-                  } ${isAnimating ? "is_animating button" : "button"}`}
-                  onClick={() => handleFavoriteClick(index)}
-                  onTouchStart={() => handleFavoriteClick(index)}
-                  onAnimationEnd={() => setIsAnimating(false)}
-                >
-                  <BiSolidHeart />
-                  <span href="" className="music-name">
-                    Favorite
-                  </span>
-                </div>
-                <button id={songs.ID}
-                  className="button"
-                  onClick={(e) => addToPlaylistId(e.target.id)}
-                >
-                  <BiSolidBookmarkHeart />
-                  Add to Playlist
-                </button>
+          <div className="music-item" key={currentTrackIndex}>
+            <h2 className="music-name">{currentTrack.name}</h2>
+            <h4 className="music-name">{currentTrack.genre}</h4>
+            <AudioPlayer track={currentTrack} />
+            <div className="flexbox">
+              <div
+                className={`favme ${
+                  favoritedState[currentTrackIndex] ? "active button" : "button"
+                } ${isAnimating ? "is_animating button" : "button"}`}
+                onClick={() => handleFavoriteClick(currentTrackIndex)}
+                onTouchStart={() => handleFavoriteClick(currentTrackIndex)}
+                onAnimationEnd={() => setIsAnimating(false)}
+              >
+                <BiSolidHeart />
+                <span href="" className="music-name">
+                  Favorite
+                </span>
               </div>
-              )
+              <button
+                id={songs.ID}
+                className="button"
+                onClick={(e) => addToPlaylistId(e.target.id)}
+              >
+                <BiSolidBookmarkHeart />
+                Add to Playlist
+              </button>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

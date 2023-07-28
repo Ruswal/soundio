@@ -3,6 +3,7 @@ import { BiHeart, BiSolidBookmarkHeart, BiSolidHeart } from "react-icons/bi";
 import AudioPlayer from "./AudioPlayer"; // Import the AudioPlayer component
 import genre from "../components/genres.jsx";
 import "./style/MusicGrid.css";
+import useObserver from "./useObserver";
 
 const MusicGrid = ({ songs, addToPlaylistId }) => {
   // const songs = props.songs;
@@ -16,7 +17,7 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
 
   // const [genre, setByGenre] = useState([]);
   const sortedSongs = [...songs].sort((a, b) => a.name.localeCompare(b.name));
-
+  const observer = useObserver();
   /*
   const handleTrackChange = (e) => {
     const trackIndex = parseInt(e.target.value);
@@ -25,6 +26,10 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
     setCurrentTrackIndex(trackIndex);
   };
 */
+  useEffect(() => {
+    observer.notify();
+  }, [currentTrack]);
+
   useEffect(() => {
     setCurrentTrack(sortedSongs[currentTrackIndex]);
   }, [currentTrackIndex, sortedSongs]);
@@ -77,7 +82,11 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
           <div className="music-item" key={currentTrackIndex}>
             <h2 className="music-name">{currentTrack.name}</h2>
             <h4 className="music-name">{currentTrack.genre}</h4>
-            <AudioPlayer track={currentTrack} />
+            <AudioPlayer
+              track={currentTrack}
+              // Subscribe the AudioPlayer to the observer
+              onTrackChange={() => setCurrentTrack(currentTrack)}
+            />
             <div className="flexbox">
               <div
                 className={`favme ${

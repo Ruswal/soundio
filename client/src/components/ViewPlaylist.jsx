@@ -10,6 +10,7 @@ import {
 
 import { GET_PLAYLISTS_ITEMS } from "../assets/constants";
 import "./style/MusicGrid.css";
+import useObserver from "./useObserver";
 
 const userData = localStorage.getItem("data");
 const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
@@ -22,6 +23,8 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
   const [currentTrack, setCurrentTrack] = useState(songs[0]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
+  const observer = useObserver();
+
   const playAudio = async (url) => {
     try {
       const audioModule = await import(url);
@@ -31,6 +34,10 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
       console.error("Error loading audio:", error);
     }
   };
+
+  useEffect(() => {
+    observer.notify();
+  }, [currentTrack]);
 
   useEffect(() => {
     setCurrentTrack(songs[currentTrackIndex]);
@@ -127,7 +134,11 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
                 <div className="music-item" key={currentTrackIndex}>
                   <h2 className="music-name">{currentTrack.name}</h2>
                   <h4 className="music-name">{currentTrack.genre}</h4>
-                  <AudioPlayer track={currentTrack} />
+                  <AudioPlayer
+                    track={currentTrack}
+                    // Subscribe the AudioPlayer to the observer
+                    onTrackChange={() => setCurrentTrack(currentTrack)}
+                  />
                 </div>
               )}
             </div>

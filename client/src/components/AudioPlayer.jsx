@@ -5,7 +5,7 @@ import DisplayTrack from "./DisplayTrack";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
-const AudioPlayer = ({ track }) => {
+const AudioPlayer = ({ track, onTrackChange }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   // const [currentTrack, setCurrentTrack] = useState(track);
   const [timeProgress, setTimeProgress] = useState(0);
@@ -18,6 +18,10 @@ const AudioPlayer = ({ track }) => {
   console.log(track);
   const progressBarRef = useRef();
   const currentTrack = track;
+
+  useEffect(() => {
+    onTrackChange();
+  }, [track]);
 
   useEffect(() => {
     // Play or pause the audio when the current track changes

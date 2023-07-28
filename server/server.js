@@ -184,22 +184,6 @@ app.post('/upload', uploads.array('files'), (req, res) => {
     if (result.length === 1) { res.json({status: true, message: 'Song uploaded successfully'}) }
     else { res.json({status: false, message: 'Failed to upload song.'}) }
   })
-
-
-  // console.log(__dirname + '/uploads/' + req.files[1].filename)
-
-
-  // const uploadFile = async() => {
-  //   const options = {
-  //     destination: reqBody.songName + '.mp3',
-  //   }
-  //   await storage.bucket(bucketName).upload(reqBody.localFileDestination, options);
-
-  //   console.log(`${reqBody.localFileDestination} uploaded to ${bucketName}`)
-  // }
-  // fs.close();
-
-  // uploadFile().catch(console.error);
 })
 
 app.post('/search', (req, res) => {
@@ -215,12 +199,12 @@ app.post('/search', (req, res) => {
 
 })
 
-app.get('/get-songs', (req, res) => {
+app.post('/get-songs', (req, res) => {
   const getSongsQuery = 'SELECT * FROM songs';
 
   db.query(getSongsQuery, (err, result) => {
     if(err) throw err;
-    res.send(result);
+    return res.send(result);
   })
 })
 

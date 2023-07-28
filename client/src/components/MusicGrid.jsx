@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BiHeart, BiSolidBookmarkHeart, BiSolidHeart } from "react-icons/bi";
-import AudioPlayer from "./AudioPlayer"; // Import the AudioPlayer component
 import genre from "../components/genres.jsx";
+import AudioPlayer from "./AudioPlayer"; // Import the AudioPlayer component
 import "./style/MusicGrid.css";
 import useObserver from "./useObserver";
 
@@ -31,6 +31,10 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
   }, [currentTrack]);
 
   useEffect(() => {
+    console.log(addToPlaylistId);
+  }, [addToPlaylistId])
+
+  useEffect(() => {
     setCurrentTrack(sortedSongs[currentTrackIndex]);
   }, [currentTrackIndex, sortedSongs]);
 
@@ -48,7 +52,7 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
     // You can implement your playlist logic here.
     // For example, you could create a new state for the playlist and add the selected song to it.
     console.log("Adding song to playlist:", e.target.id);
-    addToPlaylistId = e.target.id;
+    // addToPlaylistId = e.target.id;
   };
 
   const genreSongs = getGenre(songs, genreTitle);
@@ -88,23 +92,10 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
               onTrackChange={() => setCurrentTrack(currentTrack)}
             />
             <div className="flexbox">
-              <div
-                className={`favme ${
-                  favoritedState[currentTrackIndex] ? "active button" : "button"
-                } ${isAnimating ? "is_animating button" : "button"}`}
-                onClick={() => handleFavoriteClick(currentTrackIndex)}
-                onTouchStart={() => handleFavoriteClick(currentTrackIndex)}
-                onAnimationEnd={() => setIsAnimating(false)}
-              >
-                <BiSolidHeart />
-                <span href="" className="music-name">
-                  Favorite
-                </span>
-              </div>
               <button
-                id={songs.ID}
+                id={currentTrack.ID}
                 className="button"
-                onClick={(e) => addToPlaylistId(e.target.id)}
+                onClick={(e) => {addToPlaylistId(e.target.id)}}
               >
                 <BiSolidBookmarkHeart />
                 Add to Playlist

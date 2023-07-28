@@ -149,7 +149,11 @@ const Homepage = () => {
   // get all the songs for the discover page when window loads.
   const getSongs = async () => {
     try {
-      const response = await axios.get(GET_SONGS);
+      const response = await axios.post(GET_SONGS, {
+        headers: {
+          'Content-Type': 'application.json',
+        }
+      });
       return response.data;
     } catch (err) {
       console.log(err);
@@ -164,11 +168,6 @@ const Homepage = () => {
         {
           user_id: USER_ID,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
       return response.data;
     } catch (err) {
@@ -212,7 +211,7 @@ const Homepage = () => {
       onLoad={() => {
         //   getPlaylists();
         //  setSongs(getSongs());
-        //setComponent("Discover");
+        setComponent("Discover");
       }}
     >
       <Header />
@@ -290,7 +289,7 @@ const Homepage = () => {
               currentPlaylistQueue={setCurrentPlaylistQueue}
             />
           ) : component === "AddToPlaylist" ? (
-            <AddToPlaylist playlists={playlists} songID={addToPlaylistId} />
+            <AddToPlaylist playlists={playlists} songID={addToPlaylistId} backComponent={setComponent} />
           ) : (
             <div>
               <h1>Music Library</h1>
@@ -302,7 +301,6 @@ const Homepage = () => {
             </div>
           )}
         </div>
-        <div className="footer">{/*<AudioPlayer />*/}</div>
       </div>
     </div>
   );

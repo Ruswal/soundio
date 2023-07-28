@@ -6,14 +6,15 @@ const mysql = require('mysql');
 const {Storage} = require('@google-cloud/storage');
 const port = process.env.PORT||3001;
 const multer = require ('multer');
+const path = require("path");
 
 const app = express();
 
 app.use(bodyParser.json());
 
 app.use(cors({
-  // origin: 'http://localhost:5173',
-  origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
+  origin: 'http://localhost:5173',
+  // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 
@@ -25,6 +26,7 @@ const db = mysql.createConnection({
   user: process.env.USRNAME,
   password: process.env.PSWD,
   multipleStatements: true,
+
 });
 
 // connection to the database
@@ -37,13 +39,11 @@ db.connect((err)=>{
 app.post('/login', (req, res) => {
 
   const values = [req.body.email, req.body.pass];
-  console.log(values);
 
   const query = 'select * from users where email = ? and pswd = ?';
 
   db.query(query, [req.body.email, req.body.pass], (err, result) => {
     if (err) throw err;
-    console.log(result);
 
     if(result.length === 1){
       res.json({status: true, message: "Login successful", result});
@@ -87,19 +87,42 @@ app.post('/register', (req,res) => {
 // create playlist endpoint
 app.post('/create-playlist', (req, res) => {
 
-  const createPlaylistValues = req.body;
-
   const createPlaylistQuery = 'INSERT INTO user_playlist (user, name, created_by, created_on) VALUES (?, ?, ?, ?)';
 
-  db.query(createPlaylistQuery, createPlaylistValues, (err, result) => {
+  const lastInsertedID = 'SELECT LAST_INSERT_ID() as ID';
+
+  db.query(createPlaylistQuery, [
+    req.body.user,
+    req.body.name,
+    req.body.created_by,
+    new Date(),
+  ], (err, result) => {
     if(err) throw err;
-
-    if(result.length === 1) res.json({status: true, message: 'playlist created'}, result);
-    else res.json({status: false, message: 'failed to create the playlist'});
-
+    db.query(lastInsertedID, (err, result) => {
+      if(err) throw err;
+      res.status(200).send(result);
+    })
   });
-
 });
+
+// update playlist name endpoint
+app.post('/update-playlist-name', (req, res) => {
+
+  const updatePlaylistName = 'UPDATE user_playlist SET name = ? WHERE ID = ? AND user = ?';
+
+  db.query(
+    updatePlaylistName,[
+      req.body.name,
+      req.body.id,
+      req.body.user,
+    ], (err, result) => {
+      if(err) throw err;
+      if(result.length === 1) res.status(200).send(result);
+      else res.status(201).send('no playlist found');
+    });
+});
+
+
 
 // upload song endpoint
 
@@ -121,26 +144,21 @@ async function authenticateImplicitWithAdc() {
     projectId,
   });
   const [buckets] = await storage.getBuckets();
-  console.log('Buckets:');
 
-  for (const bucket of buckets) {
-    console.log(`- ${bucket.name}`);
-  }
-
-  console.log('Listed all storage buckets.');
 }
 
+
 const multerStorage = multer.diskStorage({
-  destination: function(req, file, callback){
-    callback(null, __dirname + '/uploads');
+  destination: function (req, file, callback) {
+    const uploadDir = path.resolve(__dirname, "../client/uploads");
+    callback(null, uploadDir);
   },
   filename: function(req, file, callback){
-    callback(null, file.originalname);
+    callback(null, Date.now() + '.mp3');
   }
 })
 
-// const uploads = multer({storage: multerStorage});
-const uploads = multer({dest: __dirname + '/uploads'});
+const uploads = multer({storage: multerStorage});
 
 // authenticateImplicitWithAdc();
 app.post('/upload', uploads.array('files'), (req, res) => {
@@ -149,9 +167,8 @@ app.post('/upload', uploads.array('files'), (req, res) => {
 
   const storage = new Storage();
   const bucketName = 'soundio-songs';
-  const URL = '/server/uploads/' + req.files[0].filename;
+  const URL = '/uploads/' + req.files[0].filename;
 
-  console.log(req.files[0].filename);
   const uploadSongValues = [
     req.body.songName,
     URL,
@@ -188,7 +205,6 @@ app.post('/upload', uploads.array('files'), (req, res) => {
 app.post('/search', (req, res) => {
 
   const searchValue = req.body.value + '%';
-  console.log(searchValue);
 
   const searchQuery = 'SELECT name FROM songs WHERE name LIKE ?'
 
@@ -206,6 +222,38 @@ app.get('/get-songs', (req, res) => {
     if(err) throw err;
     res.send(result);
   })
+})
+
+app.post('/get-playlists', (req, res) => {
+  const user_id = req.body.user_id;
+  const getPlaylistsQuery = 'SELECT * from user_playlist where user = ?';
+
+  db.query(getPlaylistsQuery, user_id, (err, result) => {
+    if(err) throw err;
+    res.send(result);
+  })
+})
+
+app.post('/get-playlist-items', (req, res) => {
+  const id = req.body.playlist;
+  const getPlaylistItems = 'SELECT S.*, P.name AS P_name FROM songs S LEFT JOIN playlist_items PI ON S.ID = PI.song LEFT JOIN user_playlist P ON P.ID = PI.playlist WHERE PI.playlist = ?';
+
+  db.query(getPlaylistItems, id, (err, result) => {
+    if(err) throw err;
+    res.status(200).send(result);
+  })
+})
+
+app.post('/add-to-playlist', (req, res) => {
+  const selectedPlaylist = req.body.selectedPlaylist;
+  const songID = req.body.songID;
+  const query = 'INSERT INTO playlist_items (playlist, song) VALUES (?, ?)';
+  for (let index = 0; index < selectedPlaylist.length; index++) {
+    db.query(query, [selectedPlaylist[index], songID], (err, result) => {
+      if(err) throw (err)
+      res.status(200).send('Saved to playlist');
+    })
+  }
 })
 
 app.listen(port, () => {

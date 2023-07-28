@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import axios from '../api/axios.js';
+import { LOGIN } from "../assets/constants.js";
 import AuthContext from "../context/AuthProvider.jsx";
 import './style/form.css';
-
-// const LOGIN_URL = 'http://localhost:3001/login';
-const LOGIN_URL = 'https://server-dot-canvas-advice-391121.wm.r.appspot.com/login';
 
 function Login(props) {
 
@@ -18,7 +16,7 @@ function Login(props) {
 	const [pass, setPass] = useState("");
 	const [message, setMessage] = useState("");
 	const [err, setErr] = useState('');
-	
+
 
 	useEffect(() => {
 		userRef.current.focus();
@@ -30,9 +28,9 @@ function Login(props) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		try {
-			const response = await axios.post(LOGIN_URL, JSON.stringify({email, pass}), {
+			const response = await axios.post(LOGIN, JSON.stringify({email, pass}), {
 				headers: {
 					'Content-Type': 'application/json',
 					withCredentials: true,

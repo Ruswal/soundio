@@ -16,18 +16,38 @@
 }
 
 .clickable>div{
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   padding: 0.5rem;
   color: white;
+}
+
+.clickable>div:hover{
+  color: rgb(36, 36, 36);
 }
 
 .user-playlist-container{
   margin-top: 35px;
 }
 
+.yourPlaylistTitle{
+  color: rgba(0, 255, 255, 1);
+  font-size: larger;
+  font-weight: bold;
+  border:rgba(0, 255, 255, 1) solid;
+}
+
 .user-playlists{
   border:rgb(0, 255, 255);
   border-width: 10px;
+  overflow-y: scroll;
+	height: 50vh;
+	-ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.user-playlists::-webkit-scrollbar {
+  display: none;
 }
 
 .createPlaylist{

@@ -39,13 +39,11 @@ db.connect((err)=>{
 app.post('/login', (req, res) => {
 
   const values = [req.body.email, req.body.pass];
-  console.log(values);
 
   const query = 'select * from users where email = ? and pswd = ?';
 
   db.query(query, [req.body.email, req.body.pass], (err, result) => {
     if (err) throw err;
-    console.log(result);
 
     if(result.length === 1){
       res.json({status: true, message: "Login successful", result});
@@ -104,14 +102,11 @@ app.post('/create-playlist', (req, res) => {
       if(err) throw err;
       res.status(200).send(result);
     })
-    console.log(result);
   });
 });
 
 // update playlist name endpoint
 app.post('/update-playlist-name', (req, res) => {
-
-  console.log(req.body)
 
   const updatePlaylistName = 'UPDATE user_playlist SET name = ? WHERE ID = ? AND user = ?';
 
@@ -150,11 +145,6 @@ async function authenticateImplicitWithAdc() {
   });
   const [buckets] = await storage.getBuckets();
 
-  for (const bucket of buckets) {
-    console.log(`- ${bucket.name}`);
-  }
-
-  console.log('Listed all storage buckets.');
 }
 
 
@@ -179,7 +169,6 @@ app.post('/upload', uploads.array('files'), (req, res) => {
   const bucketName = 'soundio-songs';
   const URL = '/uploads/' + req.files[0].filename;
 
-  console.log(req.files[0].filename);
   const uploadSongValues = [
     req.body.songName,
     URL,
@@ -216,7 +205,6 @@ app.post('/upload', uploads.array('files'), (req, res) => {
 app.post('/search', (req, res) => {
 
   const searchValue = req.body.value + '%';
-  console.log(searchValue);
 
   const searchQuery = 'SELECT name FROM songs WHERE name LIKE ?'
 
@@ -248,7 +236,6 @@ app.post('/get-playlists', (req, res) => {
 
 app.post('/get-playlist-items', (req, res) => {
   const id = req.body.playlist;
-  console.log(id);
   const getPlaylistItems = 'SELECT S.*, P.name AS P_name FROM songs S LEFT JOIN playlist_items PI ON S.ID = PI.song LEFT JOIN user_playlist P ON P.ID = PI.playlist WHERE PI.playlist = ?';
 
   db.query(getPlaylistItems, id, (err, result) => {

@@ -6,7 +6,6 @@ import './style/AddToPlaylist.css';
 import './style/MusicGrid.css';
 
 const AddToPlaylist = ({playlists, songID, backComponent}) => {
-
 	const [selectedPlaylist, setSelectedPlaylist] = useState({playlistID: []});
 	const [message, setMessage] = useState('');
 
@@ -14,11 +13,7 @@ const AddToPlaylist = ({playlists, songID, backComponent}) => {
 		const {id, checked} = e.target;
 		const {playlistID} = selectedPlaylist;
 
-		if(checked && playlistID.length == 0){
-			setSelectedPlaylist({
-				playlistID: [id]
-			})
-		} else if(checked) {
+		if(checked) {
 			setSelectedPlaylist({
 				playlistID: [...playlistID, id]
 			});
@@ -28,6 +23,10 @@ const AddToPlaylist = ({playlists, songID, backComponent}) => {
 			})
 		}
   }
+
+	useEffect(() => {
+		console.log(selectedPlaylist.playlistID)
+	})
 
 	const handleSave = async() => {
 		try{

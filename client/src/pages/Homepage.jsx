@@ -78,7 +78,7 @@ const Homepage = () => {
           },
         }
       );
-  
+
       console.log(response.data[0].ID);
       setPlaylistID(response.data[0].ID); // update this line
       localStorage.setItem("playlistID", response.data[0].ID);
@@ -96,9 +96,9 @@ const Homepage = () => {
   const handleEditPlaylistName = async (index, newName) => {
     let updatedPlaylists = [...playlists];
     updatedPlaylists[index].name = newName;
-  
+
     const updatedPlaylistName = newName === "" ? "New Playlist" : newName;
-  
+
     try {
       const response = await axios.post(
         UPDATE_PLAYLIST_NAME,
@@ -117,7 +117,7 @@ const Homepage = () => {
     } catch (err) {
       console.log(err);
     }
-  
+
     setUserPlaylists(updatedPlaylists);
     setPlaylists(updatedPlaylists);
     setEditMode(null);  // Add this line
@@ -271,7 +271,7 @@ const Homepage = () => {
           ) : (
             <div>
               <h1>Music Library</h1>
-              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = { setAddToPlaylistId} />}
+              {songs == null ? <p>Loading...</p> : <MusicGrid songs={songs} addToPlaylistId = {setAddToPlaylistId} />}
             </div>
           )
           }

@@ -109,7 +109,6 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
               <div className="music-item" key={index}>
                 <h2 className="music-name">{songs.name}</h2>
                 <h4 className="music-name">{songs.genre}</h4>
-                <h4 className="music-name">{songs.url}</h4>
                 <audio controls>
                   <source src={songs.url} type="audio/mpeg" />
                   Your browser does not support the audio element.

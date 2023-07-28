@@ -188,6 +188,7 @@ const Homepage = () => {
       onLoad={() => {
         //   getPlaylists();
         //  setSongs(getSongs());
+        setComponent('Discover');
       }}
     >
       <Header />
@@ -204,7 +205,6 @@ const Homepage = () => {
                 >
                   Home
                 </div>
-                <div>Liked Music</div>
 
                 {USER_ARTIST ? (
                   <div
@@ -262,7 +262,7 @@ const Homepage = () => {
           ) : component === 'ViewPlaylistItem' ? (
             <ViewPlaylist playlistID={currentPlaylist} currentPlaylistQueue = {setCurrentPlaylistQueue}/>
           ) : component === 'AddToPlaylist' ? (
-            <AddToPlaylist playlists={playlists} songID= {addToPlaylistId}/>
+            <AddToPlaylist playlists={playlists} songID= {addToPlaylistId} backComponent={setComponent}/>
           ) : (
             <div>
               <h1>Music Library</h1>

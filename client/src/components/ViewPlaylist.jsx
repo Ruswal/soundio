@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import AudioPlayer from "./AudioPlayer";
 import {
   BiPauseCircle,
   BiPlayCircle,
@@ -11,15 +11,16 @@ import {
 import { GET_PLAYLISTS_ITEMS } from "../assets/constants";
 import "./style/MusicGrid.css";
 
-const userData = localStorage.getItem('data');
+const userData = localStorage.getItem("data");
 const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
 
 const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
-
   const [audioPlayers, setAudioPlayers] = useState([]);
-	const [songs, setSongs] = useState([]);
-	const [playlistName, setPlaylistsName] = useState('');
+  const [songs, setSongs] = useState([]);
+  const [playlistName, setPlaylistsName] = useState("");
   const [isPlaylistEmpty, setIsPlaylistEmpty] = useState();
+  const [currentTrack, setCurrentTrack] = useState(songs[0]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
   const playAudio = async (url) => {
     try {
@@ -31,6 +32,10 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
     }
   };
 
+  useEffect(() => {
+    setCurrentTrack(songs[currentTrackIndex]);
+  }, [currentTrackIndex, songs]);
+  /*
   useEffect(() => {
     const createAudioPlayers = async () => {
       // Create audio players for each music item
@@ -47,7 +52,7 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
       audioPlayers.forEach((player) => player.pause());
     };
   }, [songs]);
-
+*/
   const handlePlayPause = (index) => {
     const newAudioPlayers = [...audioPlayers];
     const audioPlayer = newAudioPlayers[index];
@@ -61,62 +66,72 @@ const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
     setAudioPlayers(newAudioPlayers);
   };
 
-	const getPlaylistItem = async(playlistID) => {
-		try {
-			const response = await axios.post(
-				GET_PLAYLISTS_ITEMS,{
-					playlist: playlistID,
-				},{
-					headers:{
-						'Content-Type': 'application/json',
-					}
-				}
-			);
-			return response.data;
-		} catch (err) {
-			console.error(err);
-		}
-	}
+  const getPlaylistItem = async (playlistID) => {
+    try {
+      const response = await axios.post(
+        GET_PLAYLISTS_ITEMS,
+        {
+          playlist: playlistID,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-	useEffect(()=>{
-		const loadPlaylistItem = async() => {
-			try{
-				const playlistItems = await getPlaylistItem(playlistID);
-				setSongs(playlistItems);
-        currentPlaylistQueue(playlistItems)
-				setPlaylistsName(playlistItems.P_name);
-        if(playlistItems.length) setIsPlaylistEmpty(true);
-			}catch(err){
-				console.error("Error fetching data:", err);
-			}
-		}
-		loadPlaylistItem();
-	}, [playlistID]);
+  useEffect(() => {
+    const loadPlaylistItem = async () => {
+      try {
+        const playlistItems = await getPlaylistItem(playlistID);
+        setSongs(playlistItems);
+        currentPlaylistQueue(playlistItems);
+        setPlaylistsName(playlistItems.P_name);
+        if (playlistItems.length) setIsPlaylistEmpty(true);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+    loadPlaylistItem();
+  }, [playlistID]);
 
   return (
     <div onLoad={() => getPlaylistItem(playlistID)}>
       <div className="music-grid">
-        <h2 className="font-bold text-3xl text-white text-left">
-
-        </h2>
+        <h2 className="font-bold text-3xl text-white text-left"></h2>
         {isPlaylistEmpty === false ? (
-          <h2 className="music-name">
-            So empty! Add some songs here...
-          </h2>
-          ) : (
+          <h2 className="music-name">So empty! Add some songs here...</h2>
+        ) : (
+          <>
+            <div className="w-full flex justify-between items-center sm:flex-row flex-col mt-4 mb-10">
+              <select
+                onChange={(e) => {
+                  setCurrentTrackIndex(e.target.value);
+                }}
+                value={currentTrackIndex}
+              >
+                {songs.map((song, index) => (
+                  <option key={index} value={index}>
+                    {song.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="scrollable flex flex-wrap sm:justify-start justify-center gap-8">
-            {songs.map((songs, index) => (
-              <div className="music-item" key={index}>
-                <h2 className="music-name">{songs.name}</h2>
-                <h4 className="music-name">{songs.genre}</h4>
-                <audio controls>
-                  <source src={songs.url} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-                )
-              </div>
-            ))}
-          </div>
+              {currentTrack && ( // Add a conditional check for currentTrack
+                <div className="music-item" key={currentTrackIndex}>
+                  <h2 className="music-name">{currentTrack.name}</h2>
+                  <h4 className="music-name">{currentTrack.genre}</h4>
+                  <AudioPlayer track={currentTrack} />
+                </div>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

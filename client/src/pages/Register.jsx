@@ -1,13 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import axios from '../api/axios.js';
+import {
+  Link,
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
+import axios from "../api/axios.js";
 import { REGISTER_URL } from "../assets/constants.js";
 import AuthContext from "../context/AuthProvider.jsx";
-import './style/form.css';
+import "./style/form.css";
 
 function Register(props) {
-
-  const REGISTER_URL = 'http://localhost:3001/register';
+  const REGISTER_URL = "http://localhost:3001/register";
 
   const errRef = useRef();
   const userRef = useRef();
@@ -16,12 +21,12 @@ function Register(props) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [artistChecked, setArtistChecked] = useState();
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [genre, setGenre] = useState('');
+  const [genre, setGenre] = useState("");
 
   useEffect(() => {
-    setErr('');
+    setErr("");
   }, [email, pass, name, genre]);
 
   useEffect(() => {
@@ -43,7 +48,9 @@ function Register(props) {
       setErr("Please enter a password.");
       isValid = false;
     } else if (!isValidPass(pass.trim())) {
-      setErr("Please enter a valid password address. Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter");
+      setErr(
+        "Please enter a valid password address. Password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter"
+      );
       isValid = false;
     }
     return isValid;
@@ -60,9 +67,9 @@ function Register(props) {
   };
   const handleChange = (e) => {
     setArtistChecked(e.target.checked);
-    if (e.target.checked) document.getElementById('genre').disabled = false;
-    else document.getElementById('genre').disabled = true;
-  }
+    if (e.target.checked) document.getElementById("genre").disabled = false;
+    else document.getElementById("genre").disabled = true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,36 +81,38 @@ function Register(props) {
     setShowAlert(true);
 
     try {
-      const response = await axios.post(REGISTER_URL, {
-        email: email,
-        password: pass,
-        username: name,
-        artist: artistChecked,
-        genre: genre,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await axios.post(
+        REGISTER_URL,
+        {
+          email: email,
+          password: pass,
+          username: name,
+          artist: artistChecked,
+          genre: genre,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
       console.log(JSON.stringify(response?.data));
 
-      setEmail('');
-      setPass('');
-      setName('');
-      setGenre('');
+      setEmail("");
+      setPass("");
+      setName("");
+      setGenre("");
       setArtistChecked(false);
-      document.getElementById('artist-checkbox').checked = false;
-
+      document.getElementById("artist-checkbox").checked = false;
     } catch (err) {
-
-      if(!err?.response){
-        setErr('No server response.');
-      } else if(err?.response === 400){
-        setErr('Invalid input.');
-      } else if(err?.response === 401){
-        setErr('unauthorized.');
+      if (!err?.response) {
+        setErr("No server response.");
+      } else if (err?.response === 400) {
+        setErr("Invalid input.");
+      } else if (err?.response === 401) {
+        setErr("unauthorized.");
       } else {
-        setErr('Registration failed.');
+        setErr("Registration failed.");
       }
       errRef.current.focus();
     }
@@ -114,34 +123,86 @@ function Register(props) {
     setTimeout(() => {
       e.target.submit();
     }, 5000);
-
-  }
+  };
 
   return (
     <div className="form-container">
-      {showAlert && (<div className="alert">Registration successful</div>)}
-      <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
+      {showAlert && (
+        <div className="alert">Registration successful, return to login</div>
+      )}
+      <p
+        ref={errRef}
+        className={err ? "errmessage" : "offscreen"}
+        aria-live="assertive"
+      >
+        {err}
+      </p>
 
       <form className="registration-form" onSubmit={handleSubmit}>
         <p className="formHeader">Soundio</p>
 
-        <input className="input" value={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full Name" id="name" name="name" ref = {userRef}autoComplete="given-name" required/>
+        <input
+          className="input"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="name"
+          placeholder="Full Name"
+          id="name"
+          name="name"
+          ref={userRef}
+          autoComplete="given-name"
+          required
+        />
 
-        <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Enter E-mail" id="email" name="email" autoComplete="given-name" required/>
+        <input
+          className="input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          placeholder="Enter E-mail"
+          id="email"
+          name="email"
+          autoComplete="given-name"
+          required
+        />
 
-        <input className="input" value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Enter Password" id="password" name="password" autoComplete="off" required/>
+        <input
+          className="input"
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
+          type="password"
+          placeholder="Enter Password"
+          id="password"
+          name="password"
+          autoComplete="off"
+          required
+        />
 
-        <div className='input button'>
-        <input type='checkbox' id="artist-checkbox" label="Register as an artist?" className="button" onChange={handleChange}/>
-        <label for='artist-checkbox'>Register as an artist?</label>
+        <div className="input button">
+          <input
+            type="checkbox"
+            id="artist-checkbox"
+            label="Register as an artist?"
+            className="button"
+            onChange={handleChange}
+          />
+          <label for="artist-checkbox">Register as an artist?</label>
         </div>
 
-        <input className="input" disabled = {true} value={genre} onChange={(e) => setGenre(e.target.value)} type="genre" placeholder="Genre" id="genre" name="Genre" required/>
+        <input
+          className="input"
+          disabled={true}
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          type="genre"
+          placeholder="Genre"
+          id="genre"
+          name="Genre"
+          required
+        />
 
-        <button className="button">
-          Register
-        </button>
-        <Link to='/login' className="button" >
+        <button className="button">Register</button>
+        <Link to="/login" className="button">
           Return to login
         </Link>
       </form>

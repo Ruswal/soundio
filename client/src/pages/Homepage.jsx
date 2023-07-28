@@ -57,6 +57,8 @@ const Homepage = () => {
     console.log(addToPlaylistId);
   }, [addToPlaylistId]);
 
+  const [playlistID, setPlaylistID] = useState(null); // add this line
+
   const handleCreatePlaylist = async () => {
     const defaultPlaylistName = "New Playlist";
     createNewPlaylist(defaultPlaylistName);
@@ -76,9 +78,9 @@ const Homepage = () => {
           },
         }
       );
-
+  
       console.log(response.data[0].ID);
-      setNewPlaylistID(response.data[0].ID);
+      setPlaylistID(response.data[0].ID); // update this line
       localStorage.setItem("playlistID", response.data[0].ID);
     } catch (err) {
       console.log(err);
@@ -92,17 +94,17 @@ const Homepage = () => {
   };
 
   const handleEditPlaylistName = async (index, newName) => {
-    let updatedPlaylists = [...userPlaylists];
+    let updatedPlaylists = [...playlists];
     updatedPlaylists[index].name = newName;
-
+  
     const updatedPlaylistName = newName === "" ? "New Playlist" : newName;
-
+  
     try {
       const response = await axios.post(
         UPDATE_PLAYLIST_NAME,
         {
           name: updatedPlaylistName,
-          id: localStorage.getItem("playlistID"),
+          id: playlistID, // update this line
           user: USER_ID,
         },
         {
@@ -111,11 +113,14 @@ const Homepage = () => {
           },
         }
       );
-      console.log(localStorage.getItem("playlistID"));
-      //localStorage.removeItem("playlistID");
+      console.log(playlistID); // update this line
     } catch (err) {
       console.log(err);
     }
+  
+    setUserPlaylists(updatedPlaylists);
+    setPlaylists(updatedPlaylists);
+    setEditMode(null);  // Add this line
   };
 
   const viewPlaylist = (e) => {

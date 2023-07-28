@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 
 import AudioPlayer from "../components/AudioPlayer.jsx";
 
-import "./style/homepage.css";
 import "./style/Sidebar.css";
+import './style/audioPlayer.css';
+import './style/customize-progress-bar.css';
+import "./style/homepage.css";
 
 import { CREATE_PLAYLIST, GET_PLAYLISTS, GET_SONGS, UPDATE_PLAYLIST_NAME } from "../assets/constants.js";
 import AddToPlaylist from "../components/AddToPlaylist.jsx";
@@ -269,7 +271,11 @@ const Homepage = () => {
           )
           }
         </div>
-        <div className="footer">{<AudioPlayer queue={currentPlaylistQueue} />}</div>
+        <div className="footer">
+          {
+          <AudioPlayer />
+          }
+        </div>
       </div>
     </div>
   );

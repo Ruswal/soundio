@@ -1,10 +1,23 @@
 //import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { React } from 'react';
 
-const DisplayTrack = ({ currentTrack, audioRef }) => {
+const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef, handleNext }) => {
+
+  const onLoadedMetadata = () => {
+  const seconds = audioRef.current.duration;
+  setDuration(seconds);
+  progressBarRef.current.max = seconds;
+  console.log(audioRef.current.duration);
+  };
+
   return (
     <div>
-      <audio src={currentTrack.src} ref={audioRef} />
+      <audio
+        src={currentTrack.src}
+        ref={audioRef}
+        onLoadedMetadata={onLoadedMetadata}
+        onEnded={handleNext}
+      />
       <div className="audio-info">
       {/*}  <div className="audio-image">
           {currentTrack.thumbnail ? (

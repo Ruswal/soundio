@@ -149,7 +149,6 @@ async function authenticateImplicitWithAdc() {
     projectId,
   });
   const [buckets] = await storage.getBuckets();
-  console.log('Buckets:');
 
   for (const bucket of buckets) {
     console.log(`- ${bucket.name}`);
@@ -244,7 +243,6 @@ app.post('/get-playlists', (req, res) => {
   db.query(getPlaylistsQuery, user_id, (err, result) => {
     if(err) throw err;
     res.send(result);
-    console.log(result);
   })
 })
 
@@ -256,8 +254,19 @@ app.post('/get-playlist-items', (req, res) => {
   db.query(getPlaylistItems, id, (err, result) => {
     if(err) throw err;
     res.status(200).send(result);
-    console.log(result);
   })
+})
+
+app.post('/add-to-playlist', (req, res) => {
+  const selectedPlaylist = req.body.selectedPlaylist;
+  const songID = req.body.songID;
+  const query = 'INSERT INTO playlist_items (playlist, song) VALUES (?, ?)';
+  for (let index = 0; index < selectedPlaylist.length; index++) {
+    db.query(query, [selectedPlaylist[index], songID], (err, result) => {
+      if(err) throw (err)
+      res.status(200).send('Saved to playlist');
+    })
+  }
 })
 
 app.listen(port, () => {

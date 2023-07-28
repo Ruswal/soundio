@@ -24,6 +24,7 @@ const Homepage = () => {
   const [editMode, setEditMode] = useState(null);
   const [tempPlaylistName, setTempPlaylistName] = useState("");
   const [addToPlaylistId, setAddToPlaylistId] = useState(initialValue);
+  const [currentPlaylistQueue, setCurrentPlaylistQueue] = useState([]);
 
   const userDataString = localStorage.getItem("data");
   const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -175,6 +176,10 @@ const Homepage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log(currentPlaylistQueue)
+  }, [currentPlaylistQueue])
+
   return (
     <div
       className="homepage-container"
@@ -253,7 +258,7 @@ const Homepage = () => {
           {component === "FileUploadPage" ? (
             <FileUploadPage />
           ) : component === 'ViewPlaylistItem' ? (
-            <ViewPlaylist playlistID={currentPlaylist} />
+            <ViewPlaylist playlistID={currentPlaylist} currentPlaylistQueue = {setCurrentPlaylistQueue}/>
           ) : component === 'AddToPlaylist' ? (
             <AddToPlaylist playlists={playlists} songID= {addToPlaylistId}/>
           ) : (
@@ -264,7 +269,7 @@ const Homepage = () => {
           )
           }
         </div>
-        <div className="footer">{<AudioPlayer />}</div>
+        <div className="footer">{<AudioPlayer queue={currentPlaylistQueue} />}</div>
       </div>
     </div>
   );

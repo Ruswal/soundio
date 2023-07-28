@@ -14,7 +14,7 @@ import "./style/MusicGrid.css";
 const userData = localStorage.getItem('data');
 const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
 
-const ViewPlaylist = ({ playlistID }) => {
+const ViewPlaylist = ({ playlistID, currentPlaylistQueue }) => {
 
   const [audioPlayers, setAudioPlayers] = useState([]);
 	const [songs, setSongs] = useState([]);
@@ -83,6 +83,7 @@ const ViewPlaylist = ({ playlistID }) => {
 			try{
 				const playlistItems = await getPlaylistItem(playlistID);
 				setSongs(playlistItems);
+        currentPlaylistQueue(playlistItems)
 				setPlaylistsName(playlistItems.P_name);
         if(playlistItems.length) setIsPlaylistEmpty(true);
 			}catch(err){

@@ -207,7 +207,14 @@ const Homepage = () => {
   }
 
   return (
-    <div className="homepage-container" onLoad={() => {}}>
+    <div
+      className="homepage-container"
+      onLoad={() => {
+        //   getPlaylists();
+        //  setSongs(getSongs());
+        setComponent("Discover");
+      }}
+    >
       <Header />
       <div className="homepage">
         <div className="sidebar-holder">

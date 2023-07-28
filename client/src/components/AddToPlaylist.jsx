@@ -2,21 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { ADD_TO_PLAYLIST } from "../assets/constants";
 import '../pages/style/form.css';
+import './style/AddToPlaylist.css';
 import './style/MusicGrid.css';
 
-const AddToPlaylist = ({playlists, songID}) => {
-
-	const [selectedPlaylist, setSelectedPlaylist] = useState({playlistID: []})
+const AddToPlaylist = ({playlists, songID, backComponent}) => {
+	const [selectedPlaylist, setSelectedPlaylist] = useState({playlistID: []});
+	const [message, setMessage] = useState('');
 
 	const handleChange = (e) => {
 		const {id, checked} = e.target;
 		const {playlistID} = selectedPlaylist;
 
-		if(checked && playlistID.length == 0){
-			setSelectedPlaylist({
-				playlistID: [id]
-			})
-		} else if(checked) {
+		if(checked) {
 			setSelectedPlaylist({
 				playlistID: [...playlistID, id]
 			});
@@ -28,8 +25,8 @@ const AddToPlaylist = ({playlists, songID}) => {
   }
 
 	useEffect(() => {
-		console.log(selectedPlaylist.playlistID);
-	}, [selectedPlaylist.playlistID])
+		console.log(selectedPlaylist.playlistID)
+	})
 
 	const handleSave = async() => {
 		try{
@@ -42,10 +39,17 @@ const AddToPlaylist = ({playlists, songID}) => {
 						'Content-Type': 'application/json',
 					}
 				}
-			)
+			);
+			if(response.status === 200) {
+				setMessage('Song saved! Click back button to go back...')
+			}
 		} catch(err){
 			console.error(err);
 		}
+	}
+
+	const handleBack = () => {
+		backComponent('Discover');
 	}
 
 	return(
@@ -60,10 +64,13 @@ const AddToPlaylist = ({playlists, songID}) => {
 					</div>
 				))}
 			</div>
-
-      <button className="button" onClick={handleSave}>
-        Save
-      </button>
+			<div className="message">{message}</div>
+			<div className="button-container">
+				<button className="button" onClick={handleSave}>
+					Save
+				</button>
+				<button className="button" onClick={handleBack}> Back </button>
+			</div>
     </div>
 	)
 }

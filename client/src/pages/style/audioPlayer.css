@@ -1,15 +1,15 @@
-* {
+/*{
     box-sizing: border-box;
   }
-  
+
   body {
     font-family: sans-serif;
     background: #f2f2f2;
     margin: 0 10px;
   }
-  
+*/
   .audio-player {
-    background: #c1b6bc;
+    background: #242424;
   }
   
   .inner {
@@ -25,17 +25,17 @@
   }
   
   .text {
-    color: #f50;
+    color: rgb(255, 255, 255);
   }
   
   .title {
-    color: #fff;
+    color: rgba(0, 255, 242, 255);
     font-weight: 100;
     font-size: 32px;
     margin-bottom: 0;
     padding: 2px;
     line-height: 37px;
-    background-color: rgba(0,0,0,.8);
+   /* background-color: rgba(0,0,0,.8); */
   }
   
   /* controls */
@@ -81,6 +81,6 @@
   }
   
   .time.current {
-    color: #f50;
+    color: rgb(0, 0, 0);
   }
   

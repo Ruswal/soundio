@@ -179,7 +179,7 @@ const Homepage = () => {
         const fetchedplaylists = await getPlaylists();
         const fetchedsongs = await getSongs();
         let timeTaken = performance.now() - start;
-        console.log('Time taken to fetch the songs: ' + timeTaken + 'ms.')
+        console.log('Time taken to fetch the songs and user playlist: ' + timeTaken + 'ms.')
         setSong(fetchedsongs);
         setPlaylists(fetchedplaylists);
         setIsLoading(false);

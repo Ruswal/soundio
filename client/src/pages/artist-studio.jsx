@@ -61,6 +61,7 @@ const FileUploadPage = () => {
       setSongName("");
       setSongGenre("");
       setIsFileSelected(false);
+      document.getElementById('files').value = '';
     } catch (err) {
       console.log(err);
       if (!err.response) {

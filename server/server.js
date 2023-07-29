@@ -13,9 +13,9 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  // origin: 'http://localhost:5173',
   // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
-  // origin: 'https://canvas-advice-391121.wm.r.appspot.com',
+  origin: 'https://canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 

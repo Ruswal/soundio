@@ -27,7 +27,7 @@ export const links = [
 const SERVER = 'https://server-dot-canvas-advice-391121.wm.r.appspot.com';
 const LOCAL = 'http://localhost:3001'
 
-const host = LOCAL;
+const host = SERVER;
 
 export const LOGIN = host + '/login';
 export const REGISTER_URL = host + '/register';

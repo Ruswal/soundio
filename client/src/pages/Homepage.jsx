@@ -80,9 +80,6 @@ const Homepage = () => {
       setCurrentPlaylist(null);
       setComponent(id);
     }
-    // if(id === 'AddToPlaylist'){
-    //   set
-    // }
     if (id === "ViewPlaylistItem") {
       setComponent(id);
     }
@@ -206,10 +203,11 @@ const Homepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let start = performance.now();
         const fetchedplaylists = await getPlaylists();
-        console.log("fetchedplaylists:", fetchedplaylists);
         const fetchedsongs = await getSongs();
-        console.log("fetchedsongs:", fetchedsongs);
+        let timeTaken = performance.now() - start;
+        console.log('Time taken to fetch the songs: ' + timeTaken + 'ms.')
         setSong(fetchedsongs);
         setPlaylists(fetchedplaylists);
         setIsLoading(false);

@@ -7,16 +7,15 @@ const {Storage} = require('@google-cloud/storage');
 const multerGoogleStorage = require('multer-google-storage');
 const port = process.env.PORT||3001;
 const multer = require ('multer');
-const path = require("path");
 
 const app = express();
 
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  // origin: 'http://localhost:5173',
   // origin: 'https://client-dot-canvas-advice-391121.wm.r.appspot.com',
-  // origin: 'https://canvas-advice-391121.wm.r.appspot.com',
+  origin: 'https://canvas-advice-391121.wm.r.appspot.com',
   credentials: true,
 }));
 
@@ -149,17 +148,6 @@ async function authenticateImplicitWithAdc() {
 
 }
 
-
-// const multerStorage = multer.diskStorage({
-//   destination: function (req, file, callback) {
-//     const uploadDir = path.resolve(__dirname, "tmp/uploads");
-//     callback(null, uploadDir);
-//   },
-  // filename: function(req, file, callback){
-  //   callback(null, Date.now() + '.mp3');
-  // }
-// })
-
 var uploadHandler = multer({
   storage: multerGoogleStorage.storageEngine({
     autoRetry: true,
@@ -172,9 +160,7 @@ var uploadHandler = multer({
   })
 })
 
-// const uploads = multer({storage: multerStorage});
-
-// authenticateImplicitWithAdc();
+// upload endpoint
 app.post('/upload', uploadHandler.any(), (req, res) => {
   const URL = req.files[0].path;
 
@@ -197,6 +183,7 @@ app.post('/upload', uploadHandler.any(), (req, res) => {
   })
 })
 
+// search endpoint
 app.post('/search', (req, res) => {
 
   const searchValue = req.body.value + '%';
@@ -207,9 +194,9 @@ app.post('/search', (req, res) => {
     if(err) throw (err)
     res.send(res);
   })
-
 })
 
+// get-songs endpoint
 app.post('/get-songs', (req, res) => {
   const getSongsQuery = 'SELECT * FROM songs';
 
@@ -219,6 +206,7 @@ app.post('/get-songs', (req, res) => {
   })
 })
 
+// get-playlist endpoint
 app.post('/get-playlists', (req, res) => {
   const user_id = req.body.user_id;
   const getPlaylistsQuery = 'SELECT * from user_playlist where user = ?';
@@ -229,6 +217,7 @@ app.post('/get-playlists', (req, res) => {
   })
 })
 
+// get-playlist-item endpoint
 app.post('/get-playlist-items', (req, res) => {
   const id = req.body.playlist;
   const getPlaylistItems = 'SELECT S.*, P.name AS P_name FROM songs S LEFT JOIN playlist_items PI ON S.ID = PI.song LEFT JOIN user_playlist P ON P.ID = PI.playlist WHERE PI.playlist = ?';
@@ -239,6 +228,7 @@ app.post('/get-playlist-items', (req, res) => {
   })
 })
 
+// add-to-playlist endpoint
 app.post('/add-to-playlist', (req, res) => {
   const selectedPlaylist = req.body.selectedPlaylist;
   const songID = req.body.songID;

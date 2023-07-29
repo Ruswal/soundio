@@ -151,4 +151,6 @@ const FileUploadPage = () => {
       </div>
     </div>
   );
-}; 
+};
+
+export default FileUploadPage;

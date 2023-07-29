@@ -43,6 +43,34 @@ const Homepage = () => {
   const USER_ARTIST =
     userData && userData.length > 0 ? userData[0].isArtist : null;
 
+    const ComponentFactory = (props) => {
+      switch (props.component) {
+        case "FileUploadPage":
+          return <FileUploadPage />;
+        case "ViewPlaylistItem":
+          return (
+            <ViewPlaylist
+              playlistID={props.currentPlaylist}
+              currentPlaylistQueue={props.setCurrentPlaylistQueue}
+            />
+          );
+        case "AddToPlaylist":
+          return (
+            <AddToPlaylist
+              playlists={props.playlists}
+              songID={props.addToPlaylistId}
+              backComponent={props.setComponent}
+            />
+          );
+        default:
+          return props.songs == null ? (
+            <p>Loading...</p>
+          ) : (
+            <MusicGrid songs={props.songs} addToPlaylistId={props.setAddToPlaylistId} />
+          );
+      }
+    };
+
   const changeElement = (id) => {
     if (id === "Discover") {
       setCurrentPlaylist(null);
@@ -280,25 +308,15 @@ const Homepage = () => {
           </div>
         </div>
         <div className="main-holder">
-          {component === "FileUploadPage" ? (
-            <FileUploadPage />
-          ) : component === "ViewPlaylistItem" ? (
-            <ViewPlaylist
-              playlistID={currentPlaylist}
-              currentPlaylistQueue={setCurrentPlaylistQueue}
-            />
-          ) : component === "AddToPlaylist" ? (
-            <AddToPlaylist playlists={playlists} songID={addToPlaylistId} backComponent={setComponent} />
-          ) : (
-            <div>
-              <h1>Music Library</h1>
-              {songs == null ? (
-                <p>Loading...</p>
-              ) : (
-                <MusicGrid songs={songs} addToPlaylistId={setAddToPlaylistId} />
-              )}
-            </div>
-          )}
+        <ComponentFactory
+            component={component}
+            currentPlaylist={currentPlaylist}
+            setCurrentPlaylistQueue={setCurrentPlaylistQueue}
+            playlists={playlists}
+            addToPlaylistId={addToPlaylistId}
+            setComponent={setComponent}
+            songs={songs}
+          />
         </div>
       </div>
     </div>

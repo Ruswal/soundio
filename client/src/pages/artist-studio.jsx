@@ -3,8 +3,37 @@ import axios from "../api/axios.js";
 import { UPLOAD } from "../assets/constants.js";
 import genre from "../components/genres.jsx";
 import AuthContext from "../context/AuthProvider.jsx";
+import lamejs from "lamejs";
 import "./style/artistStudio.css";
 import "./style/form.css";
+
+function UploaderFactory(fileType, formData) {
+  switch (fileType) {
+    case "audio/mp3":
+      return {
+        handleSubmission: async function (formData) {
+          formData.append("file", selectedFile);
+        },
+      };
+      case "audio/wav":
+        return {
+          handleSubmission: async function (formData) {
+ 
+            const reader = new FileReader();
+            reader.onload = function(e) {
+            const wavData = new Uint8Array(e.target.result);
+            const wav = lamejs.WavHeader.readHeader(new DataView(wavData.buffer));
+            const mp3encoder = new lamejs.Mp3Encoder(wav.channels, wav.sampleRate, 128);
+ 
+            };
+            reader.readAsArrayBuffer(formData.get('file')); 
+            formData.append("file", selectedFile);
+          },
+        };
+    default:
+      throw new Error(`Unsupported file type: ${fileType}`);
+  }
+}
 
 const FileUploadPage = () => {
   const authContext = useContext(AuthContext);
@@ -79,7 +108,7 @@ const FileUploadPage = () => {
 
     if (selectedFile) {
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      UploaderFactory(selectedFile.type, formData);
     }
   };
 

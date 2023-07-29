@@ -57,9 +57,9 @@ app.post('/login', (req, res) => {
 // register endpoint
 app.post('/register', (req,res) => {
 
-  const createUserValues = [req.body.email, req.body.password, req.body.username, '', new Date(), req.body.artist, req.body.genre];
+  const createUserValues = [req.body.email, req.body.password, req.body.username, '', new Date(), req.body.artist];
 
-  const createUserQuery = 'INSERT INTO users(email, pswd, username, pfp, created_dt, isArtist, makeGenre) values (?, ?, ?, ?, ?, ?, ?)';
+  const createUserQuery = 'INSERT INTO users(email, pswd, username, pfp, created_dt, isArtist) values (?, ?, ?, ?, ?, ?)';
 
   const searchExistingEmail = 'SELECT ID FROM users where email = ?'
 
@@ -78,7 +78,7 @@ app.post('/register', (req,res) => {
         }
       });
     } else {
-      res.json({status:false, message: "E-mail already in-use."});
+      res.json({status:false, message: "E-mail already in-use. Try different one"});
     }
   });
 

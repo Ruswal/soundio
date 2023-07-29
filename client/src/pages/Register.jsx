@@ -23,11 +23,10 @@ function Register(props) {
   const [artistChecked, setArtistChecked] = useState();
   const [err, setErr] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [genre, setGenre] = useState("");
 
   useEffect(() => {
     setErr("");
-  }, [email, pass, name, genre]);
+  }, [email, pass, name]);
 
   useEffect(() => {
     userRef.current.focus();
@@ -65,11 +64,7 @@ function Register(props) {
     // Password validation logic
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
-  const handleChange = (e) => {
-    setArtistChecked(e.target.checked);
-    if (e.target.checked) document.getElementById("genre").disabled = false;
-    else document.getElementById("genre").disabled = true;
-  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -77,8 +72,6 @@ function Register(props) {
       errRef.current.focus();
       return;
     }
-
-    setShowAlert(true);
 
     try {
       const response = await axios.post(
@@ -88,7 +81,6 @@ function Register(props) {
           password: pass,
           username: name,
           artist: artistChecked,
-          genre: genre,
         },
         {
           headers: {
@@ -96,14 +88,21 @@ function Register(props) {
           },
         }
       );
-      console.log(JSON.stringify(response?.data));
 
-      setEmail("");
-      setPass("");
-      setName("");
-      setGenre("");
-      setArtistChecked(false);
-      document.getElementById("artist-checkbox").checked = false;
+      console.log(response.data.status)
+
+      if(response.data.status === false) {
+        e.preventDefault();
+        setErr(response.data.message)
+      } else {
+        setShowAlert(true);
+        setEmail("");
+        setPass("");
+        setName("");
+        setGenre("");
+        setArtistChecked(false);
+        document.getElementById("artist-checkbox").checked = false;
+      }
     } catch (err) {
       if (!err?.response) {
         setErr("No server response.");
@@ -120,9 +119,9 @@ function Register(props) {
       setShowAlert(false);
     }, 5000);
 
-    setTimeout(() => {
-      e.target.submit();
-    }, 5000);
+    // setTimeout(() => {
+    //   e.target.submit();
+    // }, 5000);
   };
 
   return (
@@ -184,22 +183,10 @@ function Register(props) {
             id="artist-checkbox"
             label="Register as an artist?"
             className="button"
-            onChange={handleChange}
           />
           <label for="artist-checkbox">Register as an artist?</label>
         </div>
 
-        <input
-          className="input"
-          disabled={true}
-          value={genre}
-          onChange={(e) => setGenre(e.target.value)}
-          type="genre"
-          placeholder="Genre"
-          id="genre"
-          name="Genre"
-          required
-        />
 
         <button className="button">Register</button>
         <Link to="/login" className="button">

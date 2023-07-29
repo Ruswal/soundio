@@ -5,11 +5,11 @@ import AuthContext, { AuthContextProvider } from "./context/AuthProvider";
 
 // import pages
 import "./App.css";
+import AudioPlayer from "./components/AudioPlayer";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import FileUploadPage from "./pages/artist-studio";
-import AudioPlayer from "./components/AudioPlayer";
 
 function App() {
 
@@ -57,19 +57,3 @@ function AppRoutes (){
 
 
 export default App;
-
-
-
-
-/*
-  const [currentForm, setCurrentForm] = useState("login");
-  const toggleForm = (formName) => {
-    setCurrentForm(formName);
-  };
-  return (<>
-    <div className="background"></div>
-    <div className="App">
-      {currentForm === "login" ? (<Login onFormSwitch={toggleForm}/>) : (<Register onFormSwitch={toggleForm}/>)}
-    </div>
-  </>);
-*/

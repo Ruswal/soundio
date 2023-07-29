@@ -8,12 +8,10 @@ const DisplayTrack = ({
   progressBarRef,
   handleNext,
 }) => {
-  console.log(currentTrack);
   const onLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
     setDuration(seconds);
     progressBarRef.current.max = seconds;
-    console.log(audioRef.current.duration);
   };
 
   return (

@@ -13,8 +13,6 @@ const AudioPlayer = ({ track, onTrackChange }) => {
 
   // reference
   const audioRef = useRef();
-  console.log(audioRef);
-  console.log(track);
   const progressBarRef = useRef();
   const currentTrack = track;
 

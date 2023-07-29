@@ -38,10 +38,6 @@ const Header = () => {
         <img className="logo" src={Logo} alt="Logo Should be here"></img>
       </div>
 
-      <div className='searchbar-container'>
-        <input type="text" placeholder="Search" className="search" onChange={(e) => getSearchedSong(e.target.value)}/>
-      </div>
-
       <div className='logout-container'>
         <UserInfo/>
         <Logout className='logout-element'/>

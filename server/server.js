@@ -59,9 +59,9 @@ app.post('/login', (req, res) => {
 // register endpoint
 app.post('/register', (req,res) => {
 
-  const createUserValues = [req.body.email, req.body.password, req.body.username, '', new Date(), req.body.artist, req.body.genre];
+  const createUserValues = [req.body.email, req.body.password, req.body.username, '', new Date(), req.body.artist];
 
-  const createUserQuery = 'INSERT INTO users(email, pswd, username, pfp, created_dt, isArtist, makeGenre) values (?, ?, ?, ?, ?, ?, ?)';
+  const createUserQuery = 'INSERT INTO users(email, pswd, username, pfp, created_dt, isArtist) values (?, ?, ?, ?, ?, ?)';
 
   const searchExistingEmail = 'SELECT ID FROM users where email = ?'
 
@@ -80,7 +80,7 @@ app.post('/register', (req,res) => {
         }
       });
     } else {
-      res.json({status:false, message: "E-mail already in-use."});
+      res.json({status:false, message: "E-mail already in-use. Try different one"});
     }
   });
 
@@ -210,12 +210,12 @@ app.post('/search', (req, res) => {
 
 })
 
-app.get('/get-songs', (req, res) => {
+app.post('/get-songs', (req, res) => {
   const getSongsQuery = 'SELECT * FROM songs';
 
   db.query(getSongsQuery, (err, result) => {
     if(err) throw err;
-    res.send(result);
+    return res.send(result);
   })
 })
 

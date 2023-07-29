@@ -1,112 +1,307 @@
-import { default as React, ReactDOM, useContext, useEffect, useRef, useState } from "react";
-import { Link, Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import axios from '../api/axios.js';
-import AuthContext from "../context/AuthProvider.jsx";
+import axios from "axios";
+import { default as React, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
+import AudioPlayer from "../components/AudioPlayer.jsx";
+
+import "./style/Sidebar.css";
+import "./style/audioPlayer.css";
+import "./style/customize-progress-bar.css";
 import "./style/homepage.css";
-import './style/Sidebar.css';
 
-import Header from '../components/Header';
-import MusicGrid from '../components/MusicGrid';
-import FileUploadPage from './artist-studio.jsx';
-import NewPlaylist from '../components/NewPlaylist';
-
+import {
+  CREATE_PLAYLIST,
+  GET_PLAYLISTS,
+  GET_SONGS,
+  UPDATE_PLAYLIST_NAME,
+} from "../assets/constants.js";
+import AddToPlaylist from "../components/AddToPlaylist.jsx";
+import Header from "../components/Header";
+import MusicGrid from "../components/MusicGrid";
+import ViewPlaylist from "../components/ViewPlaylist.jsx";
+import FileUploadPage from "./artist-studio.jsx";
 
 const Homepage = () => {
+  const [component, setComponent] = useState("");
+  const [songs, setSong] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+  const initialValue = null;
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+  const [editMode, setEditMode] = useState(null);
+  const [tempPlaylistName, setTempPlaylistName] = useState("");
+  const [addToPlaylistId, setAddToPlaylistId] = useState(initialValue);
+  const [currentPlaylistQueue, setCurrentPlaylistQueue] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const POST_URL = 'http://localhost:3001/create-playlist';
-  const [component, setComponent] = useState('');
+  const userDataString = localStorage.getItem("data");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
 
-  const authContext = useContext(AuthContext);
+  const USER_ID = userData && userData.length > 0 ? userData[0].ID : null;
+  const USER_NAME =
+    userData && userData.length > 0 ? userData[0].username : null;
+  const USER_ARTIST =
+    userData && userData.length > 0 ? userData[0].isArtist : null;
 
-  const userData = JSON.parse(localStorage.getItem('data'));
-  console.log(userData[0].ID);
+  const changeElement = (id) => {
+    if (id === "Discover") {
+      setCurrentPlaylist(null);
+      setComponent(id);
+    }
+    if (id === "FileUploadPage") {
+      setCurrentPlaylist(null);
+      setComponent(id);
+    }
+    if (id === "ViewPlaylistItem") {
+      setComponent(id);
+    }
+  };
 
-  const USER_ID = userData[0].ID;
-  const USER_NAME = userData[0].username;
+  useEffect(() => {
+    setComponent("AddToPlaylist");
+    console.log(addToPlaylistId);
+  }, [addToPlaylistId]);
 
-  const changeElement = (e) => {
-    setComponent(e);
-  }
+  const [playlistID, setPlaylistID] = useState(null); // add this line
 
-  const handleCreatePlaylist = async(e) => {
-
-    // TODO: uncomment the following snippet to send a request to the server.
-    try{
-      const response = await axios.post(POST_URL, {
-        uid: USER_ID,
-        create_by: USER_NAME,
-        playlist_name: playlist_name,
-        created_on: new Date(),
-      }, {
-        headers:{
-          'Content-Type': 'application/json',
-          withCredentials: false,
+  const handleCreatePlaylist = async () => {
+    const defaultPlaylistName = "New Playlist";
+    createNewPlaylist(defaultPlaylistName);
+    setEditMode(playlists.length);
+    try {
+      const response = await axios.post(
+        CREATE_PLAYLIST,
+        {
+          user: USER_ID,
+          name: defaultPlaylistName,
+          created_by: USER_ID,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            withCredentials: false,
+          },
         }
-      })
-    }catch(err){
+      );
+
+      console.log(response.data[0].ID);
+      setPlaylistID(response.data[0].ID); // update this line
+      localStorage.setItem("playlistID", response.data[0].ID);
+    } catch (err) {
       console.log(err);
     }
+  };
+
+  const createNewPlaylist = async (playlist_name) => {
+    const newPlaylist = [...playlists, { name: playlist_name }];
+    setPlaylists(newPlaylist);
+    setCurrentPlaylist(newPlaylist.length - 1);
+  };
+
+  const handleEditPlaylistName = async (index, newName) => {
+    let updatedPlaylists = [...playlists];
+    updatedPlaylists[index].name = newName;
+
+    const updatedPlaylistName = newName === "" ? "New Playlist" : newName;
+
+    try {
+      const response = await axios.post(
+        UPDATE_PLAYLIST_NAME,
+        {
+          name: updatedPlaylistName,
+          id: playlistID, // update this line
+          user: USER_ID,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(playlistID); // update this line
+    } catch (err) {
+      console.log(err);
+    }
+
+    setUserPlaylists(updatedPlaylists);
+    setPlaylists(updatedPlaylists);
+    setEditMode(null); // Add this line
+  };
+
+  const viewPlaylist = (e) => {
+    setCurrentPlaylist(e.target.id);
+    console.log("currentPlaylist: " + currentPlaylist);
+    setComponent("ViewPlaylistItem");
+    // setCurrentPlaylist(null);
+  };
+
+  // useEffect((e) => {
+  //   viewPlaylist()
+  // }, [currentPlaylist]);
+
+  const handleChangeTempName = (e) => {
+    setTempPlaylistName(e.target.value);
+  };
+
+  // get all the songs for the discover page when window loads.
+  const getSongs = async () => {
+    try {
+      const response = await axios.post(GET_SONGS, {
+        headers: {
+          'Content-Type': 'application.json',
+        }
+      });
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // get all the user's playlist when the window loads.
+  const getPlaylists = async () => {
+    try {
+      const response = await axios.post(
+        GET_PLAYLISTS,
+        {
+          user_id: USER_ID,
+        },
+      );
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        let start = performance.now();
+        const fetchedplaylists = await getPlaylists();
+        const fetchedsongs = await getSongs();
+        let timeTaken = performance.now() - start;
+        console.log('Time taken to fetch the songs and user playlist: ' + timeTaken + 'ms.');
+
+        setSong(fetchedsongs);
+        setPlaylists(fetchedplaylists);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+      fetchData();
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(songs.length === 0);
+  }, [songs]);
+
+  useEffect(() => {
+    console.log(currentPlaylistQueue);
+  }, [currentPlaylistQueue]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
-  // console.log(authContext.data);
-
-  const [playlists, setPlaylists] = useState([]);
-  const [currentPlaylist, setCurrentPlaylist] = useState(null);
-
-  const createNewPlaylist = (playlist_name) => {
-    setPlaylists([...playlists, {name: playlist_name}]);
-    setCurrentPlaylist(playlists.length); // Set current playlist to the new playlist
-  };
-
-  const viewPlaylist = (index) => {
-    setCurrentPlaylist(index);
-  };
-
-  const viewMusicGrid = () => {
-    setCurrentPlaylist(null);
-  };
-
   return (
-    <div className='homepage-container'>
-      <Header/>
-      <div className='homepage'>
-        <div className='sidebar-holder'>
+    <div
+      className="homepage-container"
+      onLoad={() => {
+        //   getPlaylists();
+        //  setSongs(getSongs());
+        setComponent("Discover");
+      }}
+    >
+      <Header />
+      <div className="homepage">
+        <div className="sidebar-holder">
           <div className="sidebar-container">
-            <div className='sidebar'>
-              <div className='clickable'>
-                <div id='Discover' onClick = {(e)=> {changeElement(e.target.id)}}>Home</div>
-                <div>Liked Music</div>
+            <div className="sidebar">
+              <div className="clickable">
+                <div
+                  id="Discover"
+                  onClick={() => {
+                    changeElement("Discover");
+                  }}
+                >
+                  Home
+                </div>
 
-                {
-                  true ? (
-                    <div id='FileUploadPage' onClick = {(e) => {changeElement(e.target.id)}}>
-                      Artist Studio
-                    </div>
-                  ) : <> </>
-                }
+                {USER_ARTIST ? (
+                  <div
+                    id="FileUploadPage"
+                    onClick={() => {
+                      changeElement("FileUploadPage");
+                    }}
+                  >
+                    Artist Studio
+                  </div>
+                ) : null}
               </div>
 
-                <div className='user-playlist-container'>
-                  <div id='user-playlists' className='user-playlists'>Your Playlists</div>
+              <div className="user-playlist-container">
+                <div className="yourPlaylistTitle">Your Playlists</div>
+                <div id="user-playlists" className="user-playlists">
+                  {playlists.map((playlists, index) => (
+                    <div key={index} className="clickable">
+                      {editMode === index ? (
+                        <div>
+                          <input
+                            type="text"
+                            value={tempPlaylistName}
+                            onChange={handleChangeTempName}
+                          />
+                          <button
+                            onClick={() =>
+                              handleEditPlaylistName(index, tempPlaylistName)
+                            }
+                          >
+                            Save
+                          </button>
+                        </div>
+                      ) : (
+                        <div id={playlists.ID} onClick={(e) => viewPlaylist(e)}>
+                          {playlists.name}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <Link to='../pages/Audio.jsx'> audio </Link>
-                </div>
-
-              <div className='button createPlaylist' onClick={handleCreatePlaylist}>Create Playlist</div>
+              </div>
+              <div
+                className="button createPlaylist"
+                onClick={handleCreatePlaylist}
+              >
+                Create Playlist
+              </div>
             </div>
           </div>
         </div>
-        <div className='main-holder'>
-          {
-            component == 'FileUploadPage' ? <FileUploadPage/> :
-            component == 'Discover' ? <MusicGrid/> : <MusicGrid/>
-          }
+        <div className="main-holder">
+          {component === "FileUploadPage" ? (
+            <FileUploadPage />
+          ) : component === "ViewPlaylistItem" ? (
+            <ViewPlaylist
+              playlistID={currentPlaylist}
+              currentPlaylistQueue={setCurrentPlaylistQueue}
+            />
+          ) : component === "AddToPlaylist" ? (
+            <AddToPlaylist playlists={playlists} songID={addToPlaylistId} backComponent={setComponent} />
+          ) : (
+            <div>
+              <h1>Music Library</h1>
+              {songs == null ? (
+                <p>Loading...</p>
+              ) : (
+                <MusicGrid songs={songs} addToPlaylistId={setAddToPlaylistId} />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Homepage;

@@ -1,0 +1,31 @@
+.body{
+    color: white;
+}
+.song-container {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    color: white;
+  }
+  
+
+  .item {
+    flex: 1;
+    max-width: 40%;
+    margin: 10px;
+    
+  }
+  
+  .item:nth-child(2) {
+    max-width: 30%;
+  }
+  
+  .item:nth-child(3) {
+    max-width: 20%;
+  }
+  
+  .item:nth-child(4) {
+    max-width: 10%;
+  }

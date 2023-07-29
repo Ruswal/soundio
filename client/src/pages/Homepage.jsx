@@ -187,7 +187,6 @@ const Homepage = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -210,6 +209,7 @@ const Homepage = () => {
         //   getPlaylists();
         //  setSongs(getSongs());
         setComponent("Discover");
+        fetchData();
       }}
     >
       <Header />

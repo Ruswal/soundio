@@ -129,10 +129,12 @@ const FileUploadPage = () => {
         id="files"
         className="input"
         type="file"
+        accept="audio/*"
         name="fileInput"
         onChange={changeHandler}
         required
       />
+      <div className="message">accept file format: audio/*</div>
 
       {isFileSelected ? (
         <div className="file-info-container">

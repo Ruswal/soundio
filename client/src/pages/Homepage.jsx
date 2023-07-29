@@ -175,11 +175,13 @@ const Homepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         let start = performance.now();
         const fetchedplaylists = await getPlaylists();
         const fetchedsongs = await getSongs();
         let timeTaken = performance.now() - start;
-        console.log('Time taken to fetch the songs and user playlist: ' + timeTaken + 'ms.')
+        console.log('Time taken to fetch the songs and user playlist: ' + timeTaken + 'ms.');
+
         setSong(fetchedsongs);
         setPlaylists(fetchedplaylists);
         setIsLoading(false);
@@ -187,7 +189,7 @@ const Homepage = () => {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
+      fetchData();
   }, []);
 
   useEffect(() => {
@@ -209,7 +211,6 @@ const Homepage = () => {
         //   getPlaylists();
         //  setSongs(getSongs());
         setComponent("Discover");
-        fetchData();
       }}
     >
       <Header />

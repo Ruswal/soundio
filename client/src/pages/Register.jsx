@@ -65,6 +65,12 @@ function Register(props) {
     return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(pass);
   };
 
+  const handleChange = (e) => {
+    setArtistChecked(e.target.checked);
+    if (e.target.checked) document.getElementById('genre').disabled = false;
+    else document.getElementById('genre').disabled = true;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -126,16 +132,9 @@ function Register(props) {
 
   return (
     <div className="form-container">
-      {showAlert && (
-        <div className="alert">Registration successful, return to login</div>
-      )}
-      <p
-        ref={errRef}
-        className={err ? "errmessage" : "offscreen"}
-        aria-live="assertive"
-      >
-        {err}
-      </p>
+      {showAlert && (<div className="alert">Registration successful, redirecting to login page</div>)}
+
+      <p ref={errRef} className={err ? "errmessage" : "offscreen"} aria-live='assertive'>{err}</p>
 
       <form className="registration-form" onSubmit={handleSubmit}>
         <p className="formHeader">Soundio</p>

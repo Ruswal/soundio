@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BiHeart, BiSolidBookmarkHeart, BiSolidHeart } from "react-icons/bi";
-import genre from "../components/genres.jsx";
 import AudioPlayer from "./AudioPlayer"; // Import the AudioPlayer component
 import "./style/MusicGrid.css";
 import useObserver from "./useObserver";
@@ -56,11 +55,6 @@ const MusicGrid = ({ songs, addToPlaylistId }) => {
   };
 
   const genreSongs = getGenre(songs, genreTitle);
-  console.log(genreSongs);
-  console.log(sortedSongs);
-  console.log(songs);
-  console.log(genreTitle);
-  console.log(currentTrack);
 
   return (
     <div>

@@ -6,7 +6,7 @@ import './style/AddToPlaylist.css';
 import './style/MusicGrid.css';
 
 const AddToPlaylist = ({playlists, songID, backComponent}) => {
-	console.log(songID);
+
 	const [selectedPlaylist, setSelectedPlaylist] = useState({playlistID: []});
 	const [message, setMessage] = useState('');
 
@@ -24,10 +24,6 @@ const AddToPlaylist = ({playlists, songID, backComponent}) => {
 			})
 		}
   }
-
-	useEffect(() => {
-		console.log(selectedPlaylist.playlistID)
-	})
 
 	const handleSave = async() => {
 		try{

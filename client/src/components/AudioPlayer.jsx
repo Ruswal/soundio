@@ -1,13 +1,12 @@
-import { React, useRef, useState, useEffect } from "react";
+import { React, useEffect, useRef, useState } from "react";
 
 // import components
-import DisplayTrack from "./DisplayTrack";
 import Controls from "./Controls";
+import DisplayTrack from "./DisplayTrack";
 import ProgressBar from "./ProgressBar";
 
 const AudioPlayer = ({ track, onTrackChange }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  // const [currentTrack, setCurrentTrack] = useState(track);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
